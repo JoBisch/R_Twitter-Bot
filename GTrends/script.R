@@ -13,7 +13,7 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("gtrendsR", "twitteR", "ggplot2", "lubridate", "config", "here")
+packages <- c("gtrendsR", "twitteR", "ggplot2", "lubridate", "config", "rstudioapi")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -39,7 +39,7 @@ if (Sys.getenv("RSTUDIO") == "1") {
   wd <- '/home/R_Twitter-Bot/GTrends'
 }
 
-getwd()
+print(getwd())
 
 
 ########################################
@@ -114,6 +114,6 @@ accessTokenSecret <- twitter$accessTokenSecret
 setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
 
 # post tweet ___________________________
-tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("gtrends_bitcoin_5y.png"))
+#tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("gtrends_bitcoin_5y.png"))
 
 
