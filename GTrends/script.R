@@ -13,7 +13,7 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("gtrendsR", "twitteR", "rstudioapi", "ggplot2", "lubridate", "config")
+packages <- c("gtrendsR", "twitteR", "ggplot2", "lubridate", "config", "here")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -36,7 +36,7 @@ ipak(packages)
 if (Sys.getenv("RSTUDIO") == "1") {
   wd <- dirname(rstudioapi::getSourceEditorContext()$path)
 } else {
-  wd <- getSrcDirectory()[1]
+  wd <- here()
 }
 
 
