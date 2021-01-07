@@ -33,11 +33,13 @@ ipak(packages)
 ########################################
 
 # sets working directory to RScript location
-#if (Sys.getenv("RSTUDIO") == "1") {
-#  wd <- dirname(rstudioapi::getSourceEditorContext()$path)
-#} else {
+if (Sys.getenv("RSTUDIO") == "1") {
+  wd <- dirname(rstudioapi::getSourceEditorContext()$path)
+} else {
   wd <- '/home/R_Twitter-Bot/GTrends'
-#}
+}
+
+setwd(wd)
 
 print(getwd())
 
