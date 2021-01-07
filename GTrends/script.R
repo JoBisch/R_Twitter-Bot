@@ -114,6 +114,6 @@ accessTokenSecret <- twitter$accessTokenSecret
 setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
 
 # post tweet ___________________________
-tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("gtrends_bitcoin_5y.png"))
+tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("GTrends/gtrends_bitcoin_5y.png"))
 
 
