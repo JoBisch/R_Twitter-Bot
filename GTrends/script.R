@@ -36,7 +36,7 @@ ipak(packages)
 if (Sys.getenv("RSTUDIO") == "1") {
   wd <- dirname(rstudioapi::getSourceEditorContext()$path)
 } else {
-  wd <- here()
+  wd <- '/home/R_Twitter-Bot'
 }
 
 print(wd)
@@ -95,7 +95,7 @@ plot.5y <- ggplot(data=gtrends.data.interest, aes(x=date, y=hits)) +
 plot.5y
 
 # save plot ____________________________
-ggsave("gtrends_bitcoin_5y.png", plot = last_plot())
+ggsave("GTrends/gtrends_bitcoin_5y.png", plot = last_plot())
 
 
 ########################################
