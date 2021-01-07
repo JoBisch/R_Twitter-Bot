@@ -95,7 +95,7 @@ plot.5y <- ggplot(data=gtrends.data.interest, aes(x=date, y=hits)) +
 plot.5y
 
 # save plot ____________________________
-ggsave("GTrends/gtrends_bitcoin_5y.png", plot = last_plot())
+ggsave("GTrends//gtrends_bitcoin_5y.png", plot = last_plot())
 
 
 ########################################
@@ -114,6 +114,6 @@ accessTokenSecret <- twitter$accessTokenSecret
 setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
 
 # post tweet ___________________________
-tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("GTrends/gtrends_bitcoin_5y.png"))
+tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("GTrends//gtrends_bitcoin_5y.png"))
 
 
