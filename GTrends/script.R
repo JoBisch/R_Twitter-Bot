@@ -39,6 +39,8 @@ if (Sys.getenv("RSTUDIO") == "1") {
   wd <- here()
 }
 
+print(wd)
+
 
 ########################################
 ## Global Variables                   ##
