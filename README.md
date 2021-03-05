@@ -1,4 +1,4 @@
-This Twitter-Bot is all about experimenting with Bitcoin-Data
+#This Twitter-Bot is all about experimenting with Bitcoin-Data
 
 1. Google Trends Data about Bitcoin
 
