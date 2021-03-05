@@ -20,7 +20,7 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("rtweet", "dplyr", "tidyr", "tidytext", "ggplot2", "purrr", "tibble")
+packages <- c("rtweet", "dplyr", "tidyr", "tidytext", "ggplot2", "purrr", "tibble", "treemap")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -139,8 +139,9 @@ bing.sentiment %>%
 
 ggsave("twitter_bitcoin_sentiment.png", plot = last_plot())
 
-# Sentiment Score
+# treemap
 
+# sentiment score
 
 ########################################
 ## Post Tweet                         ##
