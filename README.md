@@ -1,13 +1,17 @@
 # R_Twitter-Bot
+
 This Twitter-Bot is all about experimenting with Bitcoin-Data
 
-1. Google Trends Data about Bitcoin
+Folder Sturcture:
+
+1. GTrends: Worldwide Google Trends Data about Bitcoin
 
 
-2. Twitter Data with #Bitcoin
+2. Twitter_Sentiment-Analysis: Twitter Data with #Bitcoin #BTC
+	- twitter_sentimen-analysis: positive vs. negative words
+	- twitter_word-cloud: most word counts
 
-
-3. Bitcoin Blockchain Data
+3. OnChain: Bitcoin Blockchain Data Analysis
 
 
 4. ...
