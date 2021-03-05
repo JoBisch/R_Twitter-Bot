@@ -1,3 +1,11 @@
+########################################
+## JoBisch                            ##
+## last update: may 2020              ##
+##                                    ##
+## fetches google trends data         ##
+##                                    ##
+########################################
+
 # Twitter Bot: https://medium.com/@randerson112358/create-a-twitter-bot-using-r-5a94f1b1b886
 # Google Trends API: https://cran.r-project.org/web/packages/gtrendsR/gtrendsR.pdf
 # Twitter API: https://cran.r-project.org/web/packages/twitteR/twitteR.pdf

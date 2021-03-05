@@ -1,5 +1,5 @@
 ########################################
-## Joshua Bischoff                    ##
+## JoBisch                            ##
 ## last update: may 2020              ##
 ##                                    ##
 ## fetches twitter data and           ##
