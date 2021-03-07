@@ -49,7 +49,7 @@ ipak(packages)
 if (Sys.getenv("RSTUDIO") == "1") {
   wd <- dirname(rstudioapi::getSourceEditorContext()$path)
 } else {
-  wd <- '/home/R_Twitter-Bot/GTrends'
+  wd <- '/home/R_Twitter-Bot/Twitter_Sentiment-Analysis'
 }
 
 setwd(wd)
@@ -98,7 +98,7 @@ tweets.bitcoin.stem <- tweets.bitcoin %>%
   select(stripped_text) %>%
   unnest_tokens(word, stripped_text)
 
-# unnecessary words fpr #Bitcoin
+# unnecessary words for #Bitcoin
 bag.btc <- c("bitcoin","btc") #"crypto","cryptocurrency","blockchain","money"
 bag.btc <- enframe(bag.btc, name = "name", value = "word")
 
@@ -112,6 +112,15 @@ words.25 <- tweets.bitcoin.clean %>%
   count(word, sort = TRUE) %>%
   top_n(25) %>%
   mutate(word = reorder(word, n))
+
+# save data as csv
+words.100 <- tweets.bitcoin.clean %>%
+  count(word, sort = TRUE) %>%
+  top_n(100) %>%
+  mutate(word = reorder(word, n))
+words.100$date <- today
+write.csv(words.100, paste0('data/', today, '_twitter_words100.csv'))
+rm(words.100)
 
 ########################################
 ## Data Understanding                 ##

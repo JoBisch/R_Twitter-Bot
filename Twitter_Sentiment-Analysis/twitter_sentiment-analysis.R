@@ -48,7 +48,7 @@ ipak(packages)
 if (Sys.getenv("RSTUDIO") == "1") {
   wd <- dirname(rstudioapi::getSourceEditorContext()$path)
 } else {
-  wd <- '/home/R_Twitter-Bot/GTrends'
+  wd <- '/home/R_Twitter-Bot/Twitter_Sentiment-Analysis'
 }
 
 setwd(wd)
@@ -111,14 +111,20 @@ tweets.bitcoin.clean <- tweets.bitcoin.stem %>%
 ## Sentiment Analysis                 ##
 ########################################
 
+# append positive and negative words to bing
+yoshi.sentiment.words <- read.csv2('custom/yoshi_sentiment-words.csv')
+data.sentiment <- rbind(get_sentiments("bing"), yoshi.sentiment.words)
+
 # bin sentiment analysis
 bing.sentiment <- tweets.bitcoin.clean %>%
-  inner_join(get_sentiments("bing")) %>%
+  inner_join(data.sentiment) %>%
   count(word, sentiment, sort = TRUE) %>%
   ungroup()
 
-# add further positive and negative words
-# hodl fomo ...
+# save data as csv
+bing.sentiment$date <- today
+write.csv(bing.sentiment, paste0('data/', today, '_twitter_sentiment.csv'))
+bing.sentiment$date <- NULL
 
 # plot bing sentiment analysis
 bing.sentiment %>%
