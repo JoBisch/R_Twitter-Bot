@@ -146,6 +146,19 @@ bing.sentiment %>%
 ggsave("twitter_bitcoin_sentiment.png", plot = last_plot())
 
 # treemap
+#bing.sentiment %>%
+#  group_by(sentiment) %>%
+#  top_n(10) %>%
+#  ungroup() %>%
+#  mutate(word = reorder(word, n)) %>%
+#  treemap(
+#        index="word",
+#        vSize="n",
+#        type= "categorical",
+#        vColor = "sentiment",
+#        palette = "Spectral"
+#        )
+
 
 # sentiment score
 

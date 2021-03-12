@@ -15,7 +15,15 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("gtrendsR", "ggplot2", "lubridate", "config", "rstudioapi")
+packages <- c("gtrendsR"
+              ,"lubridate"
+              ,"config"
+              ,"rstudioapi"
+              ,"tidyverse"
+              ,"viridis"
+              ,"hrbrthemes"
+              ,"mapdata"
+              ,"hexbin")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -78,25 +86,45 @@ gtrends.data <- gtrends(keyword = keywords, geo = country, time = time,
                         onlyInterest = FALSE)
 
 # select only interst over time ________
-gtrends.data.interest <- gtrends.data$interest_over_time
+gtrends.data.country <- gtrends.data$interest_by_country
 
 ########################################
 ## Plot                               ##
 ########################################
 
-# bitcoin google trends plot 5 years ___
-plot.5y <- ggplot(data=gtrends.data.interest, aes(x=date, y=hits)) +
-  geom_line(color = "black", size=1) +
-  ylab('Relative Interest') +
-  scale_y_continuous(expand = c(0, 0), breaks = seq(0, 100, 10)) +
-  theme_bw() +
-  labs(caption="Source: Google Trends (https://www.google.com/trends)") +
-  theme(legend.position = "none", axis.title.x=element_blank())
+# Load dataset from github
+data <- read.table("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/17_ListGPSCoordinates.csv", sep=",", header=T)
 
-plot.5y
+# Get the world polygon
+world <- map_data("world")
+
+# plot
+ggplot(data, aes(x=homelon, y=homelat)) + 
+  geom_polygon(data = world, aes(x=long, y = lat, group = group), fill="grey", alpha=0.5) +
+  geom_hex(bins=100) +
+  #ggplot2::annotate("text", x = 175, y = 80, label="Worldwide Bitcoin Interest (Google Trends)", colour = "black", size=4, alpha=1, hjust=1) +
+  #ggplot2::annotate("segment", x = 100, xend = 175, y = 73, yend = 73, colour = "black", size=0.2, alpha=1) +
+  theme_void() +
+  ylim(-70, 80) +
+  scale_fill_viridis(
+    trans = "log", 
+    breaks = seq(from = 0, to = 100, by = 10),
+    name=" ", 
+    guide = guide_legend( keyheight = unit(2.5, units = "mm"), keywidth=unit(10, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1) 
+  )  +
+  ggtitle( "" ) +
+  theme(
+    legend.position = c(0.3, 0.01),
+    legend.title=element_text(color="black", size=6),
+    text = element_text(color = "#22211d"),
+    plot.title = element_text(size= 13, hjust=0.1, color = "#4e4d47", margin = margin(b = -0.1, t = 0.4, l = 2, unit = "cm")),
+  ) +
+  labs(caption="Source: Google Trends (https://www.google.com/trends)")
+
+#labs(caption="Source: Google Trends (https://www.google.com/trends)")
 
 # save plot ____________________________
-ggsave("gtrends_bitcoin_5y.png", plot = last_plot())
+ggsave("gtrends_bitcoin_world", plot = last_plot())
 
 
 ########################################
@@ -115,6 +143,6 @@ accessTokenSecret <- twitter$accessTokenSecret
 setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
 
 # post tweet ___________________________
-tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("gtrends_bitcoin_5y.png"))
+tweet(text = paste0("Worldwide Bitcoin Interest (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("gtrends_bitcoin_world.png"))
 
 
