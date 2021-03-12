@@ -15,15 +15,13 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("gtrendsR"
+packages <- c("rtweet"
+              ,"gtrendsR"
               ,"lubridate"
               ,"config"
               ,"rstudioapi"
               ,"tidyverse"
               ,"viridis"
-              ,"hrbrthemes"
-              ,"mapdata"
-              ,"hexbin"
               ,"spData"
               ,"tmap")
 
@@ -108,6 +106,7 @@ map <- tm_shape(countries) +
   tm_polygons() +
   tm_credits(text = "Source: Google Trends (https://www.google.com/trends)")
 
+map
 
 # save plot ____________________________
 tmap_save(map, "gtrends_bitcoin_world_map.png")
@@ -120,15 +119,29 @@ tmap_save(map, "gtrends_bitcoin_world_map.png")
 twitter <- config::get("twitter")
 
 # twitter login credentuials ___________
+appname <- "gtrendsc"
 consumerKey <- twitter$consumerKey
 consumerSecret <- twitter$consumerSecret
 accessToken <- twitter$accessToken
 accessTokenSecret <- twitter$accessTokenSecret
 
-# connect to twitter ___________________
-setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
+# authenticate via access token ________
+create_token(app = appname,
+             consumer_key = consumerKey,
+             consumer_secret = consumerSecret,
+             access_token = accessToken,
+             access_secret = accessTokenSecret)
+
+########################################
+## Post Tweet                         ##
+########################################
+
+# twitter text length max 140
+twitter.text <- paste0("Worldwide Bitcoin Interest (Google Trends) ", as.character(today), " #Bitcoin #BTC")
 
 # post tweet ___________________________
-tweet(text = paste0("Worldwide Bitcoin Interest (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("gtrends_bitcoin_world_map.png"))
-
-
+post_tweet(
+  status = twitter.text,
+  media = ("gtrends_bitcoin_world_map.png"),
+  
+)
