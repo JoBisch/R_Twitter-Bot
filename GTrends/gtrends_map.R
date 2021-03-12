@@ -105,7 +105,8 @@ map <- tm_shape(countries) +
           legend.reverse = T,
           id = "name_long", 
           popup.vars=c(Name = "name_long",Search.Interest = "hits",Population = "pop",Life.Expectancy = "lifeExp", GDP.per.capita = "gdpPercap")) +
-  tm_polygons()
+  tm_polygons() +
+  tm_credits(text = "Source: Google Trends (https://www.google.com/trends)")
 
 
 # save plot ____________________________
