@@ -90,7 +90,7 @@ data$ma=coredata(ma)
 plot <- ggplot(data=data, aes(x=Date, y=Value)) + 
   geom_line(color = "black", size=0.5) +
   geom_line(aes(Date,ma),color="orange", size=2) +
-  geom_point(data=data[1:1, ], aes(x=Date, y=Value), colour="black", size=1.5) +
+  geom_point(data=data[1:1, ], aes(x=Date, y=Value), colour="orange", size=2) +
   ylab('Hash Rate (TH/s)') +
   scale_y_continuous(expand = c(0, 0)) +
   theme_bw() +
