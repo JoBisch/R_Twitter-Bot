@@ -7,11 +7,12 @@ Folder Sturcture:
 1. Blockchain: Bitcoin Blockchain Data Analysis
 	- BTC_Hashrate.R: time series and simple moving average
 	- BTC_Difficulty.R: time series and simple moving average
-	- Transactions on BTC Blockchain and Lightning (tbd)
+	- (tbd) Transactions number and EUR/USD Value on BTC Blockchain and Lightning
 
-2. Comparison: Electricity, Market Cap, Transactions (tbd)
+2. (tbd) Comparison: Electricity, Market Cap, Transactions
 
-3. FearnGreedIndex (tbd)
+3. FearnGreedIndex: Plotting data from alternative.me with colors
+	- FearnGreedIndex.R
 
 4. GTrends: Plotting Worldwide Google Trends Data about Bitcoin
 	- script.R: time series
