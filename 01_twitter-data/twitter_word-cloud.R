@@ -152,8 +152,8 @@ rm(words.100)
 #ggsave("twitter_bitcoin_uw.png", plot = last_plot())
 
 Cairo::Cairo(
-  16, #length
-  12, #width
+  20, #length
+  15, #width
   file = paste("twitter_bitcoin_word-cloud", ".png", sep = ""),
   type = "png", #tiff
   bg = "white", #white or transparent depending on your requirement 
