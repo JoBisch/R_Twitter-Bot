@@ -105,7 +105,7 @@ g <- rasterGrob(redgreen, width=unit(1,"npc"), height = unit(1,"npc"),
 
 # cairo plot specification
 Cairo::Cairo(
-  26, #length
+  28, #length
   18, #width
   file = paste("alternative_fearngreed", ".png", sep = ""),
   type = "png", #tiff
