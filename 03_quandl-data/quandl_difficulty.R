@@ -96,8 +96,8 @@ data$ma=coredata(ma)
 ########################################
 
 Cairo::Cairo(
-  16, #length
-  12, #width
+  24, #length
+  16, #width
   file = paste("quandl_difficulty", ".png", sep = ""),
   type = "png", #tiff
   bg = "white", #white or transparent depending on your requirement 
