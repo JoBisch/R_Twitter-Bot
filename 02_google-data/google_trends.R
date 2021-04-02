@@ -99,8 +99,8 @@ gtrends.data.interest <- gtrends.data$interest_over_time
 ########################################
 
 Cairo::Cairo(
-  16, #length
-  12, #width
+  24, #length
+  16, #width
   file = paste("google_trends_5y", ".png", sep = ""),
   type = "png", #tiff
   bg = "white", #white or transparent depending on your requirement 
