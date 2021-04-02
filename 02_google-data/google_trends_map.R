@@ -49,7 +49,7 @@ ipak(packages)
 if (Sys.getenv("RSTUDIO") == "1") {
   wd <- dirname(rstudioapi::getSourceEditorContext()$path)
 } else {
-  wd <- '/home/R_Twitter-Bot/GTrends'
+  wd <- '/home/R_Twitter-Bot/02_google-data'
 }
 
 setwd(wd)

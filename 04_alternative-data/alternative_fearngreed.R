@@ -53,7 +53,7 @@ ipak(packages)
 if (Sys.getenv("RSTUDIO") == "1") {
   wd <- dirname(rstudioapi::getSourceEditorContext()$path)
 } else {
-  wd <- '/home/R_Twitter-Bot/FearnGreedIndex'
+  wd <- '/home/R_Twitter-Bot/04_alternative-data'
 }
 
 setwd(wd)

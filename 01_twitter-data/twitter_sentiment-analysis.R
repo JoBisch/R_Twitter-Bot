@@ -58,7 +58,7 @@ ipak(packages)
 if (Sys.getenv("RSTUDIO") == "1") {
   wd <- dirname(rstudioapi::getSourceEditorContext()$path)
 } else {
-  wd <- '/home/R_Twitter-Bot/Twitter_Sentiment-Analysis'
+  wd <- '/home/R_Twitter-Bot/01_twitter-data'
 }
 
 setwd(wd)
