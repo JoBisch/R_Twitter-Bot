@@ -1,5 +1,3 @@
-# ich bin ein test
-
 ########################################
 ## JoBisch                            ##
 ## last update: march 2021            ##
