@@ -23,7 +23,10 @@ packages <- c("rtweet"
               ,"tidyverse"
               ,"viridis"
               ,"spData"
-              ,"tmap")
+              ,"tmap"
+              ,"hrbrthemes"
+              ,"magick"
+              ,"Cairo")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -104,12 +107,13 @@ map <- tm_shape(countries) +
           id = "name_long", 
           popup.vars=c(Name = "name_long",Search.Interest = "hits",Population = "pop",Life.Expectancy = "lifeExp", GDP.per.capita = "gdpPercap")) +
   tm_polygons() +
-  tm_credits(text = "Source: Google Trends (https://www.google.com/trends)")
+  tm_credits(text = "@data99076083 | Source: Google Trends (https://www.google.com/trends)")
 
 map
 
+
 # save plot ____________________________
-tmap_save(map, "gtrends_bitcoin_world_map.png")
+tmap_save(map, "google_trends_world_map.png")
 
 
 ########################################
@@ -142,6 +146,6 @@ twitter.text <- paste0("Worldwide Bitcoin Interest (Google Trends) ", as.charact
 # post tweet ___________________________
 post_tweet(
   status = twitter.text,
-  media = ("gtrends_bitcoin_world_map.png"),
+  media = ("google_trends_world_map.png"),
   
 )

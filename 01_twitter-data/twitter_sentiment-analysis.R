@@ -20,7 +20,17 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("rtweet", "dplyr", "tidyr", "tidytext", "ggplot2", "purrr", "tibble", "treemap")
+packages <- c("rtweet"
+              ,"dplyr"
+              ,"tidyr"
+              ,"tidytext"
+              ,"ggplot2"
+              ,"purrr"
+              ,"tibble"
+              ,"treemap"
+              ,"hrbrthemes"
+              ,"magick"
+              ,"Cairo")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -126,6 +136,20 @@ bing.sentiment$date <- today
 write.csv(bing.sentiment, paste0('data/', today, '_twitter_sentiment.csv'))
 bing.sentiment$date <- NULL
 
+########################################
+## Plot Sentiment Analysis            ##
+########################################
+
+Cairo::Cairo(
+  24, #length
+  16, #width
+  file = paste("twitter_bitcoin_sentiment", ".png", sep = ""),
+  type = "png", #tiff
+  bg = "white", #white or transparent depending on your requirement 
+  dpi = 300,
+  units = "cm" #you can change to pixels etc 
+)
+
 # plot bing sentiment analysis
 bing.sentiment %>%
   group_by(sentiment) %>%
@@ -135,15 +159,30 @@ bing.sentiment %>%
   ggplot(aes(word, n, fill = sentiment)) +
          geom_col(show.legend = FALSE) +
          facet_wrap(~sentiment, scales = "free_y") +
-         labs(#title = "Recent 15.000 Tweets containing #Bitcoin",
-              y = "Count | Contribution To Sentiment",
-              x = NULL
-              #caption = as.character(today)
+         labs(title = "Contribution To Sentiment",
+              subtitle = "Recent 15.000 Tweets containing #Bitcoin",
+              y = "Count",
+              x = NULL,
+              caption = "@data99076083"
               ) +
          coord_flip() + 
-         theme_bw()
+         scale_y_continuous(expand = c(0, 0), breaks = seq(0, nrow(bing.sentiment), 100)) +
+         theme_ipsum() +
+         theme(legend.position = "none", 
+               plot.title = element_text(color = "#f7931b"),
+               plot.subtitle = element_text(color = "#3b3b3b"),
+               plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
 
-ggsave("twitter_bitcoin_sentiment.png", plot = last_plot())
+
+# add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
+logo <- image_read("../pics/logo_twitter-account.jpg")
+
+grid::grid.raster(logo, x = 0.07, y = 0.03, just = c('left', 'bottom'), width = unit(0.5, 'inches'))
+dev.off()
+
+
+
+#ggsave("twitter_bitcoin_sentiment.png", plot = last_plot())
 
 # treemap
 #bing.sentiment %>%

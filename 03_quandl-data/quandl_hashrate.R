@@ -14,7 +14,16 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("rtweet", "dplyr", "tidyr", "Quandl", "ggplot2", "zoo",  "lubridate")
+packages <- c("rtweet"
+              ,"dplyr"
+              ,"tidyr"
+              ,"Quandl"
+              ,"ggplot2"
+              ,"zoo"
+              ,"lubridate"
+              ,"hrbrthemes"
+              ,"magick"
+              ,"Cairo")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -86,22 +95,46 @@ data$ma=coredata(ma)
 ## Plotting                           ##
 ########################################
 
+Cairo::Cairo(
+  19, #length
+  14, #width
+  file = paste("quandl_hashrate", ".png", sep = ""),
+  type = "png", #tiff
+  bg = "white", #white or transparent depending on your requirement 
+  dpi = 300,
+  units = "cm" #you can change to pixels etc 
+)
+
 # plot _________________________________
 plot <- ggplot(data=data, aes(x=Date, y=Value)) + 
-  geom_line(color = "black", size=0.5) +
-  geom_line(aes(Date,ma),color="orange", size=2) +
-  geom_point(data=data[1:1, ], aes(x=Date, y=Value), colour="orange", size=2) +
-  ylab('Hash Rate (TH/s)') +
+  geom_line(color = "black", size=0.4) +
+  geom_line(aes(Date,ma), color="#f7931b", size=0.75, alpha = 0.78) +
+  geom_point(data=data[1:1, ], aes(x=Date, y=Value), colour="orange", size=1, alpha = 0.78) +
+
+  labs(title = "#Bitcoin Hash Rate (TH/s)",
+       subtitle = "100-day Simple Moving Average",
+       x = NA,
+       y = 'Hash Rate (TH/s)',
+       caption = "@data99076083 | Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)") +
   scale_y_continuous(expand = c(0, 0)) +
-  theme_bw() +
-  labs(caption="Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)") +
-  theme(legend.position = "none", axis.title.x=element_blank())
+  theme_ipsum() +
+  theme(legend.position = "none", 
+        axis.title.x=element_blank(),
+        plot.title = element_text(color = "#f7931b"),
+        plot.subtitle = element_text(color = "#3b3b3b"),
+        plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
 
 
 plot
 
+# add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
+logo <- image_read("../pics/logo_twitter-account.jpg")
+
+grid::grid.raster(logo, x = 0.07, y = 0.03, just = c('left', 'bottom'), width = unit(0.5, 'inches'))
+dev.off()
+
 # save plot ____________________________
-ggsave("BTC_hashrate.png", plot = last_plot())
+#ggsave("quandl_hashrate.png", plot = last_plot())
 
 ########################################
 ## Twitter Api                        ##
@@ -133,7 +166,7 @@ twitter.text <- paste0("#Bitcoin Hash Rate (TH/s) 100-day Simple Moving Average 
 # post tweet ___________________________
 post_tweet(
   status = twitter.text,
-  media = ("BTC_hashrate.png"),
+  media = ("quandl_hashrate.png"),
   
 )
 

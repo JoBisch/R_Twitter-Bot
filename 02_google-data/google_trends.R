@@ -21,7 +21,15 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("gtrendsR", "twitteR", "ggplot2", "lubridate", "config", "rstudioapi")
+packages <- c("gtrendsR"
+              ,"twitteR"
+              ,"ggplot2"
+              ,"lubridate"
+              ,"config"
+              ,"rstudioapi"
+              ,"hrbrthemes"
+              ,"magick"
+              ,"Cairo")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -90,19 +98,47 @@ gtrends.data.interest <- gtrends.data$interest_over_time
 ## Plot                               ##
 ########################################
 
-# bitcoin google trends plot 5 years ___
-plot.5y <- ggplot(data=gtrends.data.interest, aes(x=date, y=hits)) +
-  geom_line(color = "black", size=1) +
-  ylab('Relative Interest') +
-  scale_y_continuous(expand = c(0, 0), breaks = seq(0, 100, 10)) +
-  theme_bw() +
-  labs(caption="Source: Google Trends (https://www.google.com/trends)") +
-  theme(legend.position = "none", axis.title.x=element_blank())
+Cairo::Cairo(
+  16, #length
+  12, #width
+  file = paste("google_trends_5y", ".png", sep = ""),
+  type = "png", #tiff
+  bg = "white", #white or transparent depending on your requirement 
+  dpi = 300,
+  units = "cm" #you can change to pixels etc 
+)
 
-plot.5y
+# bitcoin google trends plot 5 years ___
+p <- ggplot(data=gtrends.data.interest, aes(x=date, y=hits)) +
+  geom_line(color = "black", size=0.5) +
+  labs(title = "Worldwide Bitcoin Interest Over Time",
+       subtitle = "Google Trends",
+       x = NA,
+       y = 'Relative Interest',
+       caption = "@data99076083 | Source: Google Trends (https://www.google.com/trends)") +
+  scale_y_continuous(expand = c(0, 0), breaks = seq(0, 100, 10)) +
+  theme_ipsum() +
+  theme(legend.position = "none", 
+        axis.title.x=element_blank(),
+        plot.title = element_text(color = "#f7931b"),
+        plot.subtitle = element_text(color = "#3b3b3b"),
+        plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
+
+
+  #p <- p + scale_color_manual(name = '',
+  #                            labels = c('Black', 'Red', 'Gray'),
+  #                            values = c('#000000', '#EC0108', '#ACAEAD'))
+
+p
+
+# add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
+logo <- image_read("../pics/logo_twitter-account.jpg")
+
+grid::grid.raster(logo, x = 0.07, y = 0.03, just = c('left', 'bottom'), width = unit(0.5, 'inches'))
+dev.off()
 
 # save plot ____________________________
-ggsave("gtrends_bitcoin_5y.png", plot = last_plot())
+#ggsave("gtrends_bitcoin_5y.png", plot = last_plot(), dpi = 300, width = NA, height = NA)
 
 
 ########################################
@@ -121,6 +157,6 @@ accessTokenSecret <- twitter$accessTokenSecret
 setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
 
 # post tweet ___________________________
-tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("gtrends_bitcoin_5y.png"))
+tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("google_trends_5y.png"))
 
 

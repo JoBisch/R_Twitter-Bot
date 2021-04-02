@@ -21,7 +21,17 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("rtweet", "dplyr", "tidyr", "tidytext", "ggplot2", "purrr", "tibble", "ggwordcloud")
+packages <- c("rtweet"
+              ,"dplyr"
+              ,"tidyr"
+              ,"tidytext"
+              ,"ggplot2"
+              ,"purrr"
+              ,"tibble"
+              ,"ggwordcloud"
+              ,"hrbrthemes"
+              ,"magick"
+              ,"Cairo")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -99,7 +109,8 @@ tweets.bitcoin.stem <- tweets.bitcoin %>%
   unnest_tokens(word, stripped_text)
 
 # unnecessary words for #Bitcoin
-bag.btc <- c("bitcoin","btc") #"crypto","cryptocurrency","blockchain","money"
+bag.btc <- read.csv2('custom/yoshi_unnecessary-words.csv')
+bag.btc <- as.vector(bag.btc$words)
 bag.btc <- enframe(bag.btc, name = "name", value = "word")
 
 # remove stop words from your list of words
@@ -127,32 +138,57 @@ rm(words.100)
 ########################################
 
 # top 25 words
-ggplot(words.25,aes(x = word, y = n)) +
-         geom_col() +
-         xlab(NULL) +
-         coord_flip() +
-         labs(x = "Unique Words",
-              y = "Count"
-              # = "Unique words counts found in recent 15.000 #Bitcoin tweets",
-              #caption = as.character(today)
-              ) +
-         theme_bw()
+#ggplot(words.25,aes(x = word, y = n)) +
+#         geom_col() +
+#         xlab(NULL) +
+#         coord_flip() +
+#         labs(x = "Unique Words",
+#              y = "Count"
+#              # = "Unique words counts found in recent 15.000 #Bitcoin tweets",
+#              #caption = as.character(today)
+#              ) +
+#         theme_bw()
+#
+#ggsave("twitter_bitcoin_uw.png", plot = last_plot())
 
-ggsave("twitter_bitcoin_uw.png", plot = last_plot())
-
+Cairo::Cairo(
+  16, #length
+  12, #width
+  file = paste("twitter_bitcoin_word-cloud", ".png", sep = ""),
+  type = "png", #tiff
+  bg = "white", #white or transparent depending on your requirement 
+  dpi = 300,
+  units = "cm" #you can change to pixels etc 
+)
 
 # top 25 words word cloud
-ggplot(words.25, aes(label = word, size = n,
-             color = n
-            )
-        ) +
+ggplot(words.25, aes(label = word, size = n, color = n)) +
         geom_text_wordcloud_area(shape = 'diamond') +
         scale_size_area(max_size = 24) +
-        theme_minimal() +
-        labs(caption = paste0('Count: Min ',min(words.25$n),' | Max ', max(words.25$n))) +
-        scale_color_gradient(low = "lightgrey", high = "black")
+        scale_color_gradient(low = "lightgrey", high = "black") +
 
-ggsave("twitter_bitcoin_uw_word-cloud.png", plot = last_plot())
+        labs(title = "Top Unique Word Counts",
+             subtitle = "Found In Recent 15.000 #Bitcoin Tweets",
+             y = NULL,
+             x = NULL,
+             caption = paste0('@data99076083 | Count: Min ', min(words.25$n),'; Max ', max(words.25$n))
+        ) +
+
+          theme_ipsum() +
+          theme(legend.position = "none", 
+                plot.title = element_text(color = "#f7931b"),
+                plot.subtitle = element_text(color = "#3b3b3b"),
+                plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
+
+
+# add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
+logo <- image_read("../pics/logo_twitter-account.jpg")
+
+grid::grid.raster(logo, x = 0.07, y = 0.03, just = c('left', 'bottom'), width = unit(0.5, 'inches'))
+dev.off()
+
+
+#ggsave("twitter_bitcoin_uw_word-cloud.png", plot = last_plot())
 
 
 ########################################
@@ -165,7 +201,7 @@ twitter.text <- paste0("Top Unique Word Counts Found In Recent 15.000 #Bitcoin T
 # post tweet ___________________________
 post_tweet(
   status = twitter.text,
-  media = ("twitter_bitcoin_uw_word-cloud.png"),
+  media = ("twitter_bitcoin_word-cloud.png"),
 
 )
 

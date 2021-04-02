@@ -14,7 +14,18 @@ rm(list = ls())
 ########################################
 
 # packages _____________________________
-packages <- c("rtweet", "dplyr", "tidyr", "ggplot2", "httr", "jsonlite", "lubridate", "grid", "RColorBrewer")
+packages <- c("rtweet"
+              ,"dplyr"
+              ,"tidyr"
+              ,"ggplot2"
+              ,"httr"
+              ,"jsonlite"
+              ,"lubridate"
+              ,"grid"
+              ,"RColorBrewer"
+              ,"hrbrthemes"
+              ,"magick"
+              ,"Cairo")
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -91,21 +102,49 @@ g <- rasterGrob(redgreen, width=unit(1,"npc"), height = unit(1,"npc"),
                 interpolate = TRUE) 
 #grid.draw(g) 
 
+
+# cairo plot specification
+Cairo::Cairo(
+  26, #length
+  18, #width
+  file = paste("alternative_fearngreed", ".png", sep = ""),
+  type = "png", #tiff
+  bg = "white", #white or transparent depending on your requirement 
+  dpi = 300,
+  units = "cm" #you can change to pixels etc 
+)
+
+
 # plot _________________________________
 plot <- ggplot(data=data, aes(x=date, y=value)) + 
   annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) +
-  geom_line(color = "black", size=0.7) +
+  geom_line(color = "black", size=0.5) +
+  
   geom_point(data=data[1:1, ], aes(x=date, y=value), colour="black", size=2) +
-  ylab('Fear & Greed Index by alternative') +
+
+  labs(title = "#Bitcoin Fear & Greed Index",
+      subtitle = "alternative.me",
+      x = NA,
+      y = 'Fear & Greed Index by alternative',
+      caption = "@data99076083 | red: fear; green: greed | Source: alternative (https://alternative.me/crypto/fear-and-greed-index)") +
   scale_y_continuous(expand = c(0, 0)) +
-  theme_bw() +
-  labs(caption="red: fear & green: greed | Source: alternative (https://alternative.me/crypto/fear-and-greed-index)") +
-  theme(legend.position = "none", axis.title.x=element_blank())
+  theme_ipsum() +
+  theme(legend.position = "none", 
+         axis.title.x=element_blank(),
+         plot.title = element_text(color = "#f7931b"),
+         plot.subtitle = element_text(color = "#3b3b3b"),
+         plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
 
 plot
 
+# add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
+logo <- image_read("../pics/logo_twitter-account.jpg")
+
+grid::grid.raster(logo, x = 0.07, y = 0.03, just = c('left', 'bottom'), width = unit(0.45, 'inches'))
+dev.off()
+
 # save plot ____________________________
-ggsave("FearnGreed.png", plot = last_plot())
+#ggsave("FearnGreed.png", plot = last_plot())
 
 ########################################
 ## Twitter Api                        ##
@@ -137,6 +176,6 @@ twitter.text <- paste0("#Bitcoin Fear & Greed Index ", as.character(today), " #B
 # post tweet ___________________________
 post_tweet(
   status = twitter.text,
-  media = ("FearnGreed.png"),
+  media = ("alternative_fearngreed.png"),
   
 )
