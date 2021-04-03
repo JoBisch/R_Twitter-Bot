@@ -171,7 +171,9 @@ bing.sentiment %>%
          theme(legend.position = "none", 
                plot.title = element_text(color = "#f7931b"),
                plot.subtitle = element_text(color = "#3b3b3b"),
-               plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
+               plot.caption = element_text(color = "#646464", face = 'bold'),
+               strip.text = element_text(face = 'bold')) +
+         scale_fill_manual(values = alpha(c("#f71b3c", "#89f71b"), 0.9))
 
 
 # add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html

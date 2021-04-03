@@ -20,6 +20,7 @@ Folder Sturcture:
 	- alternative_fearngreed.R
 
 5. 05_comparison: (tbd) 
+	- electricity, transactions volume, ...
 
 99. 99_blockchain-data: (tbd) own node?
 	- (tbd) Transactions number and EUR/USD Value on BTC Blockchain and Lightning
