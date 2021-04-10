@@ -1,17 +1,17 @@
-########################################
+##**************************************
 ## JoBisch                            ##
 ## last update: march 2021            ##
 ##                                    ##
 ## getting Bitcoin difficulty         ##
 ##                                    ##
-########################################
+##**************************************
 
 ## clear the cache _____________________
 rm(list = ls())
 
-########################################
-## Install & load new packages        ##
-########################################
+##**************************************
+## Install & load new packages      ----
+##**************************************
 
 # packages _____________________________
 packages <- c("rtweet"
@@ -38,9 +38,9 @@ ipak <- function(pkg){
 # usage ________________________________
 ipak(packages)
 
-########################################
-## Sets working directory             ##
-########################################
+##**************************************
+## Sets working directory           ----
+##**************************************
 
 # sets working directory to RScript location
 # attention all chunks and scripts must be in the same path as the scripts
@@ -61,9 +61,9 @@ today <- Sys.Date()
 today.3y <- today %m+% years(-3)
 today.5y <- today %m+% years(-5)
 
-########################################
-## Quandl API                         ##
-########################################
+##**************************************
+## Quandl API                       ----
+##**************************************
 
 # get API-Key from config ______________
 quandl <- config::get("quandl")
@@ -78,9 +78,9 @@ data <- Quandl("BCHAIN/DIFF"
 data$Value <- data$Value/1000000000000
 
 
-########################################
-## Data preparation                   ##
-########################################
+##**************************************
+## Data preparation                 ----
+##**************************************
 
 # Make zoo object of data ______________
 temp.zoo<-zoo(data$Value)
@@ -91,9 +91,9 @@ ma<-rollmean(temp.zoo, 100, fill = list(NA, NULL, NA))
 # Add calculated moving averages to existing data frame
 data$ma=coredata(ma)
 
-########################################
-## Plotting                           ##
-########################################
+##**************************************
+## Plotting                         ----
+##**************************************
 
 Cairo::Cairo(
   24, #length
@@ -136,9 +136,9 @@ dev.off()
 # save plot ____________________________
 #ggsave("quandl_difficulty.png", plot = last_plot())
 
-########################################
-## Twitter Api                        ##
-########################################
+##**************************************
+## Twitter Api                      ----
+##**************************************
 
 twitter <- config::get("twitter")
 
@@ -156,9 +156,9 @@ create_token(app = appname,
              access_token = accessToken,
              access_secret = accessTokenSecret)
 
-########################################
-## Post Tweet                         ##
-########################################
+##**************************************
+## Post Tweet                       ----
+##**************************************
 
 # twitter text length max 140
 twitter.text <- paste0("#Bitcoin Mining Difficulty (Trillions) ", as.character(today), " #BTC")

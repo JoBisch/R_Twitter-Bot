@@ -1,10 +1,10 @@
-########################################
+##**************************************
 ## JoBisch                            ##
 ## last update: may 2020              ##
 ##                                    ##
 ## fetches google trends data         ##
 ##                                    ##
-########################################
+##**************************************
 
 # Twitter Bot: https://medium.com/@randerson112358/create-a-twitter-bot-using-r-5a94f1b1b886
 # Google Trends API: https://cran.r-project.org/web/packages/gtrendsR/gtrendsR.pdf
@@ -16,9 +16,9 @@
 
 rm(list = ls())
 
-########################################
-## Install & load new packages        ##
-########################################
+##**************************************
+## Install & load new packages      ----
+##**************************************
 
 # packages _____________________________
 packages <- c("gtrendsR"
@@ -44,9 +44,9 @@ ipak <- function(pkg){
 # usage ________________________________
 ipak(packages)
 
-########################################
-## Sets working directory             ##
-########################################
+##**************************************
+## Sets working directory           ----
+##**************************************
 
 # sets working directory to RScript location
 if (Sys.getenv("RSTUDIO") == "1") {
@@ -57,9 +57,9 @@ if (Sys.getenv("RSTUDIO") == "1") {
 
 setwd(wd)
 
-########################################
-## Global Variables                   ##
-########################################
+##**************************************
+## Global Variables                 ----
+##**************************************
 
 # variable today _______________________
 
@@ -67,9 +67,9 @@ today <- Sys.Date()
 
 today.5y <- today %m+% years(-5)
 
-########################################
-## Google Trends API                  ##
-########################################
+##**************************************
+## Google Trends API                ----
+##**************************************
 
 # gtrends variables ____________________
 # define the keywords __________________
@@ -94,9 +94,9 @@ gtrends.data <- gtrends(keyword = keywords, geo = country, time = time,
 # select only interst over time ________
 gtrends.data.interest <- gtrends.data$interest_over_time
 
-########################################
-## Plot                               ##
-########################################
+##**************************************
+## Plot                             ----
+##**************************************
 
 Cairo::Cairo(
   24, #length
@@ -141,9 +141,9 @@ dev.off()
 #ggsave("gtrends_bitcoin_5y.png", plot = last_plot(), dpi = 300, width = NA, height = NA)
 
 
-########################################
-## Twitter Api                        ##
-########################################
+##**************************************
+## Twitter Api                      ----
+##**************************************
 
 twitter <- config::get("twitter")
 

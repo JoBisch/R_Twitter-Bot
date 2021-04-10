@@ -1,18 +1,18 @@
-########################################
+##**************************************
 ## JoBisch                            ##
 ## last update: march 2021            ##
 ##                                    ##
 ## fetches google trends data         ##
 ##                                    ##
-########################################
+##**************************************
 
 ## clear the cache _____________________
 
 rm(list = ls())
 
-########################################
-## Install & load new packages        ##
-########################################
+##**************************************
+## Install & load new packages      ----
+##**************************************
 
 # packages _____________________________
 packages <- c("rtweet"
@@ -41,9 +41,9 @@ ipak <- function(pkg){
 # usage ________________________________
 ipak(packages)
 
-########################################
-## Sets working directory             ##
-########################################
+##**************************************
+## Sets working directory           ----
+##**************************************
 
 # sets working directory to RScript location
 if (Sys.getenv("RSTUDIO") == "1") {
@@ -54,9 +54,9 @@ if (Sys.getenv("RSTUDIO") == "1") {
 
 setwd(wd)
 
-########################################
-## Global Variables                   ##
-########################################
+##**************************************
+## Global Variables                 ----
+##**************************************
 
 # variable today _______________________
 
@@ -64,9 +64,9 @@ today <- Sys.Date()
 
 today.5y <- today %m+% years(-5)
 
-########################################
-## Google Trends API                  ##
-########################################
+##**************************************
+## Google Trends API                ----
+##**************************************
 
 # gtrends variables ____________________
 # define the keywords __________________
@@ -95,9 +95,9 @@ gtrends.data.country <- gtrends.data$interest_by_country
 countries <- spData::world %>%
   left_join(y=gtrends.data.country,by = c("name_long" = "location"),keep=T)
 
-########################################
-## Plot                               ##
-########################################
+##**************************************
+## Plot                             ----
+##**************************************
 
 # package tmap
 map <- tm_shape(countries) +
@@ -116,9 +116,9 @@ map
 tmap_save(map, "google_trends_world_map.png")
 
 
-########################################
-## Twitter Api                        ##
-########################################
+##**************************************
+## Twitter Api                      ----
+##**************************************
 
 twitter <- config::get("twitter")
 
@@ -136,9 +136,9 @@ create_token(app = appname,
              access_token = accessToken,
              access_secret = accessTokenSecret)
 
-########################################
-## Post Tweet                         ##
-########################################
+##**************************************
+## Post Tweet                       ----
+##**************************************
 
 # twitter text length max 140
 twitter.text <- paste0("Worldwide Bitcoin Interest (Google Trends) ", as.character(today), " #Bitcoin #BTC")

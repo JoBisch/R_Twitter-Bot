@@ -1,24 +1,24 @@
-########################################
-## JoBisch                            ##
+##**************************************
+## @JoBisch                           ##
 ## last update: may 2020              ##
 ##                                    ##
 ## fetches twitter data and           ##
 ## displaying word cloud              ##
-########################################
+##**************************************
 
 ## clear the cache _____________________
 rm(list = ls())
 
-########################################
-## Resources                          ##
-########################################
+##**************************************
+## Resources                        ----
+##**************************************
 
 # twitter sentiment analysis: https://towardsdatascience.com/twitter-sentiment-analysis-and-visualization-using-r-22e1f70f6967
 # word cloud: https://cran.r-project.org/web/packages/ggwordcloud/vignettes/ggwordcloud.html
 
-########################################
-## Install & load new packages        ##
-########################################
+##**************************************
+## Install & load new packages      ----
+##**************************************
 
 # packages _____________________________
 packages <- c("rtweet"
@@ -46,9 +46,9 @@ ipak <- function(pkg){
 # usage ________________________________
 ipak(packages)
 
-########################################
-## Sets working directory             ##
-########################################
+##**************************************
+## Sets working directory           ----
+##**************************************
 
 # sets working directory to RScript location
 # attention all chunks and scripts must be in the same path as the scripts
@@ -67,9 +67,9 @@ setwd(wd)
 # variable today _______________________
 today <- Sys.Date()
 
-########################################
-## Twitter Api                        ##
-########################################
+##**************************************
+## Twitter Api                      ----
+##**************************************
 
 twitter <- config::get("twitter")
 
@@ -95,9 +95,9 @@ twitter.data.bitcoin <- search_tweets(
 # only select tweets ___________________
 tweets.bitcoin <- twitter.data.bitcoin %>% select(screen_name, text)
 
-########################################
-## Data Preparation                   ##
-########################################
+##**************************************
+## Data Preparation                 ----
+##**************************************
 
 # remove http elements manually ________
 tweets.bitcoin$stripped_text <- gsub("http\\S+","",tweets.bitcoin$text)
@@ -133,9 +133,9 @@ words.100$date <- today
 write.csv(words.100, paste0('data/', today, '_twitter_words100.csv'))
 rm(words.100)
 
-########################################
-## Data Understanding                 ##
-########################################
+##**************************************
+## Data Understanding               ----
+##**************************************
 
 # top 25 words
 #ggplot(words.25,aes(x = word, y = n)) +
@@ -171,7 +171,7 @@ ggplot(words.25, aes(label = word, size = n, color = n)) +
              subtitle = "Found In Recent 15.000 #Bitcoin Tweets",
              y = NULL,
              x = NULL,
-             caption = paste0('@data99076083 | Count: Min ', min(words.25$n),'; Max ', max(words.25$n))
+             caption = paste0('@data99076083 | Count: Min ', min(words.25$n),'; Max ', max(words.25$n), ' | ', as.character(today))
         ) +
 
           theme_ipsum() +
@@ -191,9 +191,9 @@ dev.off()
 #ggsave("twitter_bitcoin_uw_word-cloud.png", plot = last_plot())
 
 
-########################################
-## Post Tweet                         ##
-########################################
+##**************************************
+## Post Tweet                       ----
+##**************************************
 
 # twitter text length max 140
 twitter.text <- paste0("Top Unique Word Counts Found In Recent 15.000 #Bitcoin Tweets ", as.character(today), " #BTC")

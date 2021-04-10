@@ -1,17 +1,17 @@
-########################################
-## JoBisch                            ##
+##**************************************
+## @JoBisch                           ##
 ## last update: march 2021            ##
 ##                                    ##
 ## getting Bitcoin hashrate           ##
 ##                                    ##
-########################################
+##**************************************
 
 ## clear the cache _____________________
 rm(list = ls())
 
-########################################
-## Install & load new packages        ##
-########################################
+##**************************************
+## Install & load new packages      ----
+##**************************************
 
 # packages _____________________________
 packages <- c("rtweet"
@@ -38,9 +38,9 @@ ipak <- function(pkg){
 # usage ________________________________
 ipak(packages)
 
-########################################
-## Sets working directory             ##
-########################################
+##**************************************
+## Sets working directory           ----
+##**************************************
 
 # sets working directory to RScript location
 # attention all chunks and scripts must be in the same path as the scripts
@@ -61,9 +61,9 @@ today <- Sys.Date()
 today.3y <- today %m+% years(-3)
 today.5y <- today %m+% years(-5)
 
-########################################
-## Quandl API                         ##
-########################################
+##**************************************
+## Quandl API                       ----
+##**************************************
 
 # get API-Key from config ______________
 quandl <- config::get("quandl")
@@ -78,9 +78,9 @@ data <- Quandl("BCHAIN/HRATE"
 data$Value <- data$Value/1000000
 
 
-########################################
-## Data preparation                   ##
-########################################
+##**************************************
+## Data preparation                 ----
+##**************************************
 
 # Make zoo object of data ______________
 temp.zoo<-zoo(data$Value)
@@ -91,9 +91,9 @@ ma<-rollmean(temp.zoo, 100, fill = list(NA, NULL, NA))
 # Add calculated moving averages to existing data frame
 data$ma=coredata(ma)
 
-########################################
-## Plotting                           ##
-########################################
+##**************************************
+## Plotting                         ----
+##**************************************
 
 Cairo::Cairo(
   24, #length
@@ -106,23 +106,39 @@ Cairo::Cairo(
 )
 
 # plot _________________________________
-plot <- ggplot(data=data, aes(x=Date, y=Value)) + 
-  geom_line(color = "black", size=0.4) +
-  geom_line(aes(Date,ma), color="#f7931b", size=0.75, alpha = 0.78) +
-  geom_point(data=data[1:1, ], aes(x=Date, y=Value), colour="orange", size=1, alpha = 0.78) +
+plot <- ggplot(data = data, aes(x = Date, y = Value)) +
+  geom_line(color = "black", size = 0.4) +
+  geom_line(aes(Date, ma),
+            color = "#f7931b",
+            size = 0.75,
+            alpha = 0.78) +
+  
+  geom_point(data=data[1:1, ]
+             ,aes(x=Date, y=Value)
+             ,colour="orange"
+             ,size=4.5
+             ,stroke=2.1
+             ,shape=1
+             ,alpha = 0.78) +
 
-  labs(title = "#Bitcoin Hash Rate (TH/s)",
-       subtitle = "100-day Simple Moving Average",
-       x = NA,
-       y = 'Hash Rate (TH/s)',
-       caption = "@data99076083 | Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)") +
+  labs(
+    title = "#Bitcoin Hash Rate (TH/s)",
+    subtitle = "100-day Simple Moving Average",
+    x = NA,
+    y = 'Hash Rate (TH/s)',
+    caption = "@data99076083 | Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)"
+  ) +
+  
   scale_y_continuous(expand = c(0, 0)) +
+  
   theme_ipsum() +
-  theme(legend.position = "none", 
-        axis.title.x=element_blank(),
-        plot.title = element_text(color = "#f7931b"),
-        plot.subtitle = element_text(color = "#3b3b3b"),
-        plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
+  theme(
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    plot.title = element_text(color = "#f7931b"),
+    plot.subtitle = element_text(color = "#3b3b3b"),
+    plot.caption = element_text(color = "#646464", face = 'bold')
+  ) #f7931b
 
 
 plot
@@ -136,9 +152,9 @@ dev.off()
 # save plot ____________________________
 #ggsave("quandl_hashrate.png", plot = last_plot())
 
-########################################
-## Twitter Api                        ##
-########################################
+##**************************************
+## Twitter Api                      ----
+##**************************************
 
 twitter <- config::get("twitter")
 
@@ -156,22 +172,13 @@ create_token(app = appname,
              access_token = accessToken,
              access_secret = accessTokenSecret)
 
-########################################
-## Post Tweet                         ##
-########################################
+##**************************************
+## Post Tweet                       ----
+##**************************************
 
 # twitter text length max 140
 twitter.text <- paste0("#Bitcoin Hash Rate (TH/s) 100-day Simple Moving Average ", as.character(today), " #BTC")
 
 # post tweet ___________________________
-post_tweet(
-  status = twitter.text,
-  media = ("quandl_hashrate.png"),
-  
-)
-
-
-
-
-
-
+post_tweet(status = twitter.text,
+           media = "quandl_hashrate.png")

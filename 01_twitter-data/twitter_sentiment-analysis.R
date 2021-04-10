@@ -1,23 +1,23 @@
-########################################
-## JoBisch                            ##
+##**************************************
+## @JoBisch                           ##
 ## last update: may 2020              ##
 ##                                    ##
 ## fetches twitter data and           ##
 ## analyses the sentiment             ##
-########################################
+##**************************************
 
-## clear the cache _____________________
+## clear the cache
 rm(list = ls())
 
-########################################
-## Resources                          ##
-########################################
+##**************************************
+## Resources                        ----
+##**************************************
 
 # twitter sentiment analysis: https://towardsdatascience.com/twitter-sentiment-analysis-and-visualization-using-r-22e1f70f6967
 
-########################################
-## Install & load new packages        ##
-########################################
+##**************************************
+## Install & load new packages      ----
+##**************************************
 
 # packages _____________________________
 packages <- c("rtweet"
@@ -45,9 +45,9 @@ ipak <- function(pkg){
 # usage ________________________________
 ipak(packages)
 
-########################################
-## Sets working directory             ##
-########################################
+##**************************************
+## Sets working directory           ----
+##**************************************
 
 # sets working directory to RScript location
 # attention all chunks and scripts must be in the same path as the scripts
@@ -66,9 +66,9 @@ setwd(wd)
 # variable today _______________________
 today <- Sys.Date()
 
-########################################
-## Twitter Api                        ##
-########################################
+##**************************************
+## Twitter Api                      ----
+##**************************************
 
 twitter <- config::get("twitter")
 
@@ -94,9 +94,9 @@ twitter.data.bitcoin <- search_tweets(
 # only select tweets ___________________
 tweets.bitcoin <- twitter.data.bitcoin %>% select(screen_name, text)
 
-########################################
-## Data Preparation                   ##
-########################################
+##**************************************
+## Data Preparation                 ----
+##**************************************
 
 # remove http elements manually ________
 tweets.bitcoin$stripped_text <- gsub("http\\S+","",tweets.bitcoin$text)
@@ -117,9 +117,9 @@ tweets.bitcoin.clean <- tweets.bitcoin.stem %>%
   anti_join(bag.btc)
 
 
-########################################
-## Sentiment Analysis                 ##
-########################################
+##**************************************
+## Sentiment Analysis               ----
+##**************************************
 
 # append positive and negative words to bing
 yoshi.sentiment.words <- read.csv2('custom/yoshi_sentiment-words.csv')
@@ -136,9 +136,9 @@ bing.sentiment$date <- today
 write.csv(bing.sentiment, paste0('data/', today, '_twitter_sentiment.csv'))
 bing.sentiment$date <- NULL
 
-########################################
-## Plot Sentiment Analysis            ##
-########################################
+##**************************************
+## Plot Sentiment Analysis          ----
+##**************************************
 
 Cairo::Cairo(
   24, #length
@@ -163,7 +163,7 @@ bing.sentiment %>%
               subtitle = "Recent 15.000 Tweets containing #Bitcoin",
               y = "Count",
               x = NULL,
-              caption = "@data99076083"
+              caption = paste0("@data99076083 | ", as.character(today))
               ) +
          coord_flip() + 
          scale_y_continuous(expand = c(0, 0), breaks = seq(0, nrow(bing.sentiment), 100)) +
@@ -203,9 +203,9 @@ dev.off()
 
 # sentiment score
 
-########################################
-## Post Tweet                         ##
-########################################
+##**************************************
+## Post Tweet                       ----
+##**************************************
 
 # twitter text length max 140
 twitter.text <- paste0("Contribution To Sentiment Of Recent 15.000 Tweets containing #Bitcoin ", as.character(today), " #BTC")
