@@ -107,11 +107,12 @@ Cairo::Cairo(
 
 # plot _________________________________
 plot <- ggplot(data = data, aes(x = Date, y = Value)) +
-  geom_line(color = "black", size = 0.4) +
+  geom_line(color = "black", size = 0.4, alpha = 0.72) +
+  
   geom_line(aes(Date, ma),
             color = "#f7931b",
-            size = 0.75,
-            alpha = 0.78) +
+            size = 1.5,
+            alpha = 0.85) +
   
   geom_point(data=data[1:1, ]
              ,aes(x=Date, y=Value)
@@ -119,7 +120,7 @@ plot <- ggplot(data = data, aes(x = Date, y = Value)) +
              ,size=4.5
              ,stroke=2.1
              ,shape=1
-             ,alpha = 0.78) +
+             ,alpha = 0.85) + 
 
   labs(
     title = "#Bitcoin Hash Rate (TH/s)",
@@ -127,9 +128,11 @@ plot <- ggplot(data = data, aes(x = Date, y = Value)) +
     x = NA,
     y = 'Hash Rate (TH/s)',
     caption = "@data99076083 | Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)"
-  ) +
+  )+
   
+  expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0)) +
+  #scale_x_date(expand = c(0, 0)) +
   
   theme_ipsum() +
   theme(
@@ -137,8 +140,13 @@ plot <- ggplot(data = data, aes(x = Date, y = Value)) +
     axis.title.x = element_blank(),
     plot.title = element_text(color = "#f7931b"),
     plot.subtitle = element_text(color = "#3b3b3b"),
-    plot.caption = element_text(color = "#646464", face = 'bold')
-  ) #f7931b
+    plot.caption = element_text(color = "#646464", face = 'bold'),
+    panel.border = element_rect(
+      colour = "grey",
+      fill = NA,
+      size = 1
+    )
+  )
 
 
 plot

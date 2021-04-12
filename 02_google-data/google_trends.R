@@ -109,20 +109,30 @@ Cairo::Cairo(
 )
 
 # bitcoin google trends plot 5 years ___
-p <- ggplot(data=gtrends.data.interest, aes(x=date, y=hits)) +
-  geom_line(color = "black", size=0.5) +
-  labs(title = "Worldwide Bitcoin Interest Over Time",
-       subtitle = "Google Trends",
-       x = NA,
-       y = 'Relative Interest',
-       caption = "@data99076083 | Source: Google Trends (https://www.google.com/trends)") +
+p <- ggplot(data = gtrends.data.interest, aes(x = date, y = hits)) +
+  geom_line(color = "black", size = 0.5) +
+  labs(
+    title = "Worldwide Bitcoin Interest Over Time",
+    subtitle = "Google Trends",
+    x = NA,
+    y = 'Relative Interest',
+    caption = "@data99076083 | Source: Google Trends (https://www.google.com/trends)"
+  ) +
+  expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0), breaks = seq(0, 100, 10)) +
   theme_ipsum() +
-  theme(legend.position = "none", 
-        axis.title.x=element_blank(),
-        plot.title = element_text(color = "#f7931b"),
-        plot.subtitle = element_text(color = "#3b3b3b"),
-        plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
+  theme(
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    plot.title = element_text(color = "#f7931b"),
+    plot.subtitle = element_text(color = "#3b3b3b"),
+    plot.caption = element_text(color = "#646464", face = 'bold'),
+    panel.border = element_rect(
+      colour = "grey",
+      fill = NA,
+      size = 1
+    )
+  )
 
 
   #p <- p + scale_color_manual(name = '',

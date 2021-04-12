@@ -148,7 +148,7 @@ plot <- ggplot(data = data, aes(x = date, y = value)) +
     y = 'Fear & Greed Index by alternative',
     caption = "@data99076083 | red: fear; green: greed | Source: alternative (https://alternative.me/crypto/fear-and-greed-index)"
   ) +
-  
+  expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0)) +
   theme_ipsum() +
   theme(
@@ -157,7 +157,7 @@ plot <- ggplot(data = data, aes(x = date, y = value)) +
     plot.title = element_text(color = "#f7931b"),
     plot.subtitle = element_text(color = "#3b3b3b"),
     plot.caption = element_text(color = "#646464", face = 'bold')
-  ) #f7931b
+  ) 
 
 plot
 

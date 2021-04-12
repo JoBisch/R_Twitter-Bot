@@ -115,13 +115,22 @@ plot <- ggplot(data=data, aes(x=Date, y=Value)) +
       x = NA,
       y = 'Mining Difficulty (Trillions)',
       caption = "@data99076083 | Source: Quandl (https://www.quandl.com/data/BCHAIN/DIFF-Bitcoin-Difficulty)") +
-   scale_y_continuous(expand = c(0, 0)) +
-   theme_ipsum() +
-   theme(legend.position = "none", 
-         axis.title.x=element_blank(),
-         plot.title = element_text(color = "#f7931b"),
-         plot.subtitle = element_text(color = "#3b3b3b"),
-         plot.caption = element_text(color = "#646464", face = 'bold')) #f7931b
+  expand_limits(y = 0) +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_x_date(expand = c(0, 0)) +
+  theme_ipsum()+
+  theme(
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    plot.title = element_text(color = "#f7931b"),
+    plot.subtitle = element_text(color = "#3b3b3b"),
+    plot.caption = element_text(color = "#646464", face = 'bold'),
+    panel.border = element_rect(
+      colour = "grey",
+      fill = NA,
+      size = 1
+    )
+  )
 
 
 plot

@@ -158,21 +158,29 @@ bing.sentiment %>%
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(word, n, fill = sentiment)) +
          geom_col(show.legend = FALSE) +
-         facet_wrap(~sentiment, scales = "free_y") +
-         labs(title = "Contribution To Sentiment",
-              subtitle = "Recent 15.000 Tweets containing #Bitcoin",
-              y = "Count",
-              x = NULL,
-              caption = paste0("@data99076083 | ", as.character(today))
-              ) +
-         coord_flip() + 
+         facet_wrap( ~ sentiment, scales = "free_y") +
+         labs(
+           title = "Contribution To Sentiment",
+           subtitle = "Recent 15.000 Tweets containing #Bitcoin",
+           y = "Count",
+           x = NULL,
+           caption = paste0("@data99076083 | ", as.character(today))
+         ) +
+         coord_flip() +
          scale_y_continuous(expand = c(0, 0), breaks = seq(0, nrow(bing.sentiment), 100)) +
          theme_ipsum() +
-         theme(legend.position = "none", 
-               plot.title = element_text(color = "#f7931b"),
-               plot.subtitle = element_text(color = "#3b3b3b"),
-               plot.caption = element_text(color = "#646464", face = 'bold'),
-               strip.text = element_text(face = 'bold')) +
+         theme(
+           legend.position = "none",
+           plot.title = element_text(color = "#f7931b"),
+           plot.subtitle = element_text(color = "#3b3b3b"),
+           plot.caption = element_text(color = "#646464", face = 'bold'),
+           strip.text = element_text(face = 'bold'),
+           panel.border = element_rect(
+             colour = "grey",
+             fill = NA,
+             size = 1
+           )
+         ) +
          scale_fill_manual(values = alpha(c("#f71b3c", "#89f71b"), 0.9))
 
 
