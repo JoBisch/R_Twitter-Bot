@@ -25,6 +25,7 @@ packages <- c("rtweet"
               ,"magick"
               ,"Cairo")
 
+
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
 
@@ -139,6 +140,7 @@ plot <- ggplot(data = data, aes(x = Date, y = Value)) +
     legend.position = "none",
     axis.title.x = element_blank(),
     plot.title = element_text(color = "#f7931b"),
+    #plot.title.position = "plot",
     plot.subtitle = element_text(color = "#3b3b3b"),
     plot.caption = element_text(color = "#646464", face = 'bold'),
     panel.border = element_rect(
