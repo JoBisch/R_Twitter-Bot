@@ -11,3 +11,5 @@
 0 10 * * 3 sudo Rscript '/home/R_Twitter-Bot/03_quandl-data/quandl_hashrate.R'
 
 0 9 1-31/2 * * sudo Rscript '/home/R_Twitter-Bot/04_alternative-data/alternative_fearngreed.R'
+
+0 15 8 * * sudo Rscript '/home/R_Twitter-Bot/05_comparison/cambridge_electricity-index_gold.R'

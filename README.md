@@ -19,10 +19,13 @@ Folder Sturcture:
 4. 04_alternative-data: Crypto Data From alternative.me
 	- alternative_fearngreed.R
 
-5. 05_comparison: (tbd) 
-	- electricity, transactions volume, ...
+5. 05_comparison: 
+	- cambridge_electricity-index_gold.R: time series comparing bitcoin electricity to gold mining (2006)
+	- (tbd) cambridge_electricity-index_countries.R
+	- (tbd) transactions volume, ...
 
 99. 99_blockchain-data: (tbd) own node?
+	- (tbd) cambridge_mining_countries.R
 	- (tbd) Transactions number and EUR/USD Value on BTC Blockchain and Lightning
 
 
