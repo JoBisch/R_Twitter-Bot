@@ -25,8 +25,9 @@ Folder Sturcture:
 	- (tbd) transactions volume, ...
 
 99. 99_blockchain-data: (tbd) own node?
-	- (tbd) cambridge_mining_countries.R
+	- cambridge_hashrate_countries_lollipop.R: comparison of latest share of bitcoin hashrate to the previous year
 	- (tbd) Transactions number and EUR/USD Value on BTC Blockchain and Lightning
+	- (tbd) Ark metrices
 
 
 
