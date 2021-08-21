@@ -26,6 +26,7 @@ packages <- c("twitteR"
               ,"ggimage"
               ,"ggtext"
               ,"ggrepel"
+              ,"ggalt"
               ,"lubridate"
               ,"config"
               ,"rstudioapi"
@@ -115,8 +116,9 @@ labels <- c()
 for (i in 1:length(data$emoji)){
   
   img.name <- data$ALPHA.3[i]
+  labels <- c(labels, paste0(img.name, " <img src='", data$emoji[i],  "' width='15' />"))
   
-  labels <- c(labels, paste0("<img src='", data$emoji[i],  "' width='15' /><br>", img.name))
+  #labels <- c(labels, paste0("<img src='", data$emoji[i],  "' width='15' /><br>", img.name))
   
 }
 
@@ -127,73 +129,34 @@ for (i in 1:length(data$emoji)){
 Cairo::Cairo(
   1200, #length
   900, #width
-  file = paste("cambridge_hashrate_countries_lollipop", ".png", sep = ""),
+  file = paste("cambridge_hashrate_countries_dumbbell", ".png", sep = ""),
   type = "png", #tiff
   bg = "white", #white or transparent depending on your requirement 
-  dpi = 140,
+  dpi = 300,
   units = "px" #you can change to pixels etc 
 )
 
-p <- ggplot(data, aes(x = country, y = thisyear)) +
-  geom_segment(aes(
-    x = reorder(country, thisyear) ,
-    xend = country,
-    y = lastyear,
-    yend = thisyear
-  ),
-  color = "#3b3b3b") +
-  geom_point(size = 3, color = "#f7931b") +
-  geom_point(aes(x = country, y = lastyear), color = "#BCBCBC", size = 3) +
-  geom_point(aes(x = country, y = thisyear), color = "#f7931b", size = 3) +
-  
-  annotate(
-    "text",
-    label = "this year",
-    x = nrow(data) - 0.7,
-    y = data[2, 3] + 3,
-    size = 4,
-    color = "#e6840e",
-    fontface = "bold"
-  ) +
-  geom_curve(
-    aes(
-      x = nrow(data) - 0.85,
-      y = data[2, 3] + 3,
-      xend = nrow(data) - 1,
-      yend = data[2, 3] + 0.7
-    ),
-    colour = "#e6840e",
-    size = 0.3,
-    curvature = -0.2,
-    arrow = arrow(length = unit(0.015, "npc"))
-  ) +
-  
-  annotate(
-    "text",
-    label = "last year",
-    x = nrow(data) - 1.5,
-    y = data[2, 2] + 3.2,
-    size = 4,
-    color = "#A8A8A8",
-    fontface = "bold"
-  ) +
-  
-  geom_curve(
-    aes(
-      x = nrow(data) - 1.35,
-      y = data[2, 2] + 4,
-      xend = nrow(data) - 1.1,
-      yend = data[2, 2] + 0.6
-    ),
-    colour = "#A8A8A8",
-    size = 0.3,
-    curvature = -0.15,
-    arrow = arrow(length = unit(0.015, "npc"))
-  ) +
-  
-  scale_y_continuous(expand = expansion(mult = c(0, .05))) +
+p <- ggplot(data,
+            aes(
+              x =  lastyear,
+              xend = thisyear,
+              y = reorder(country, thisyear),
+              yend = country
+            ),
+            color = "#3b3b3b") +
 
-  coord_flip() +
+  geom_dumbbell(
+    colour = "grey80",
+    colour_xend = "#f7931b",
+    size = 4.0,
+    dot_guide =  TRUE,
+    dot_guide_size = 0.15,
+    dot_guide_colour = "#3b3b3b"
+  ) +
+
+
+  scale_x_continuous(expand = expansion(mult = c(0, .05))) +
+
   theme_ipsum() +
   theme(
     panel.grid.minor.y = element_blank(),
@@ -203,9 +166,9 @@ p <- ggplot(data, aes(x = country, y = thisyear)) +
   
   labs(
     title = "Share Of Global Bictoin Hashrate",
-    subtitle = paste0(as.character(format(maxdate, "%B %Y")), " Monthly Average"),
-    x = "",
-    y = '%',
+    subtitle = paste0("Monthly Average ", as.character(format(maxdate, "%B %Y"))),
+    y = "",
+    x = '%-share of total hashrate',
     caption = "@data_bitcoin | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org/mining_map)"
   ) +
   theme_ipsum() +
@@ -222,11 +185,26 @@ p <- ggplot(data, aes(x = country, y = thisyear)) +
   )
 
 # add logos to y axis: https://stackoverflow.com/questions/68747698/ggplot2-images-as-y-axis-labels-solved/68751201#68751201
-p <- p +   scale_x_discrete(name = NULL,
+p <- p +   scale_y_discrete(name = NULL,
                        labels = rev(labels)) +
   theme(axis.text.y = element_markdown(color = "black", size = 11))
 
 p
+
+ggsave("test.png", p, dpi = 300)
+
+ggsave(
+  filename = "test.png",
+  plot = last_plot(),
+  device = NULL,
+  path = NULL,
+  scale = 1,
+  width = NA,
+  height = NA,
+  units = c("cm"),
+  dpi = 110,
+  limitsize = TRUE
+)
 
 # add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
 logo <- image_read("../pics/logo_twitter-account.jpg")

@@ -114,7 +114,7 @@ plot <- ggplot(data=data, aes(x=Date, y=Value)) +
       subtitle = "Simple Moving Average",
       x = NA,
       y = 'Mining Difficulty (Trillions)',
-      caption = "@data99076083 | Source: Quandl (https://www.quandl.com/data/BCHAIN/DIFF-Bitcoin-Difficulty)") +
+      caption = "@data_bitcoin | Source: Quandl (https://www.quandl.com/data/BCHAIN/DIFF-Bitcoin-Difficulty)") +
   expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_date(expand = c(0, 0)) +

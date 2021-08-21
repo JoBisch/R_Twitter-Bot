@@ -135,7 +135,7 @@ p <- p + scale_fill_brewer(palette="RdGy") +
   labs(
     title = "Share Of Global Bictoin Hashrate",
     subtitle = paste0(as.character(max(data.labels$date)), " Monthly Average"),
-    caption = "@data99076083 | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org/mining_map)"
+    caption = "@data_bitcoin | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org/mining_map)"
   ) +
   theme_ipsum() +
   

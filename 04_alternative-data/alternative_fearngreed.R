@@ -146,7 +146,7 @@ plot <- ggplot(data = data, aes(x = date, y = value)) +
     subtitle = "alternative.me",
     x = NA,
     y = 'Fear & Greed Index by alternative',
-    caption = "@data99076083 | red: fear; green: greed | Source: alternative (https://alternative.me/crypto/fear-and-greed-index)"
+    caption = "@data_bitcoin | red: fear; green: greed | Source: alternative (https://alternative.me/crypto/fear-and-greed-index)"
   ) +
   expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0)) +

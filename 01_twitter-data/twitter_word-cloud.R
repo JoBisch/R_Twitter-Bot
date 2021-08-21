@@ -171,7 +171,7 @@ ggplot(words.25, aes(label = word, size = n, color = n)) +
              subtitle = "Found In Recent 15.000 #Bitcoin Tweets",
              y = NULL,
              x = NULL,
-             caption = paste0('@data99076083 | Count: Min ', min(words.25$n),'; Max ', max(words.25$n), ' | ', as.character(today))
+             caption = paste0('@data_bitcoin | Count: Min ', min(words.25$n),'; Max ', max(words.25$n), ' | ', as.character(today))
         ) +
 
           theme_ipsum() +

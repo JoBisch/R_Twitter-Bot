@@ -164,7 +164,7 @@ bing.sentiment %>%
            subtitle = "Recent 15.000 Tweets containing #Bitcoin",
            y = "Count",
            x = NULL,
-           caption = paste0("@data99076083 | ", as.character(today))
+           caption = paste0("@data_bitcoin | ", as.character(today))
          ) +
          coord_flip() +
          scale_y_continuous(expand = c(0, 0), breaks = seq(0, nrow(bing.sentiment), 100)) +

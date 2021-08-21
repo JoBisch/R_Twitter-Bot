@@ -121,7 +121,7 @@ p <- ggplot(data = data, aes(x = date, y = guess)) +
     subtitle = "Comparison To Gold Mining From 2006",
     x = NA,
     y = 'TWh annualised',
-    caption = "@data99076083 | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org)"
+    caption = "@data_bitcoin | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org)"
   ) +
   expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0)) +

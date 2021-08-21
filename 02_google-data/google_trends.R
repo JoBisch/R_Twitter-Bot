@@ -116,7 +116,7 @@ p <- ggplot(data = gtrends.data.interest, aes(x = date, y = hits)) +
     subtitle = "Google Trends",
     x = NA,
     y = 'Relative Interest',
-    caption = "@data99076083 | Source: Google Trends (https://www.google.com/trends)"
+    caption = "@data_bitcoin | Source: Google Trends (https://www.google.com/trends)"
   ) +
   expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0), breaks = seq(0, 100, 10)) +

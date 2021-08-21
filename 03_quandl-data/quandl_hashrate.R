@@ -128,7 +128,7 @@ plot <- ggplot(data = data, aes(x = Date, y = Value)) +
     subtitle = "100-day Simple Moving Average",
     x = NA,
     y = 'Hash Rate (TH/s)',
-    caption = "@data99076083 | Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)"
+    caption = "@data_bitcoin | Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)"
   )+
   
   expand_limits(y = 0) +

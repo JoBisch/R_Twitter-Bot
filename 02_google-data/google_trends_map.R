@@ -107,7 +107,7 @@ map <- tm_shape(countries) +
           id = "name_long", 
           popup.vars=c(Name = "name_long",Search.Interest = "hits",Population = "pop",Life.Expectancy = "lifeExp", GDP.per.capita = "gdpPercap")) +
   tm_polygons() +
-  tm_credits(text = "@data99076083 | Source: Google Trends (https://www.google.com/trends)")
+  tm_credits(text = "@data_bitcoin | Source: Google Trends (https://www.google.com/trends)")
 
 map
 

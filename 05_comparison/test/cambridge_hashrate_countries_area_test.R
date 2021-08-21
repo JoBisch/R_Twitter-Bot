@@ -122,7 +122,7 @@ p <- ggplot(data = data, aes(x = date, y = share.of.global.hashrate, fill = coun
     subtitle = "Monthly Average",
     x = NA,
     y = '%',
-    caption = "@data99076083 | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org/mining_map)"
+    caption = "@data_bitcoin | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org/mining_map)"
   ) +
   expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0)) +

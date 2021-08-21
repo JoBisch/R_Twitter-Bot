@@ -22,11 +22,11 @@ Folder Sturcture:
 5. 05_comparison: 
 	- cambridge_electricity-index_gold.R: time series comparing bitcoin electricity to gold mining (2006)
 	- (tbd) cambridge_electricity-index_countries.R
-	- cambridge_hashrate_countries_lollipop.R: comparison of latest share of bitcoin hashrate to the previous year
+	- cambridge_hashrate_countries_lollipop.R: latest share of bitcoin hashrate compared to the previous year
 	- (tbd) transactions volume, ...
 
 99. 99_blockchain-data: (tbd) own node?
-		- (tbd) Transactions number and EUR/USD Value on BTC Blockchain and Lightning
+	- (tbd) Transactions number and EUR/USD Value on BTC Blockchain and Lightning
 	- (tbd) Ark metrices
 
 
