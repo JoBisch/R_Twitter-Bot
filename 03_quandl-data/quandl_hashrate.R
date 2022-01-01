@@ -14,7 +14,8 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("rtweet"
+packages <- c("telegram.bot"
+              ,"rtweet"
               ,"dplyr"
               ,"tidyr"
               ,"Quandl"
@@ -187,8 +188,36 @@ create_token(app = appname,
 ##**************************************
 
 # twitter text length max 140
-twitter.text <- paste0("#Bitcoin Hash Rate (TH/s) 100-day Simple Moving Average ", as.character(today), " #BTC")
+text <- ""
+
+if (data[1,2] == max(data$Value)) {
+  text <- paste0("Today With ",
+                 round(data[1,2],1), 
+                 " TH/s The Bitcoin Hashrate Reached A New All Time High. #BTC #Bitcoin")
+} else {
+  text <- paste0("Today With ",
+                 round(data[1,2],1), 
+                 " TH/s The Bitcoin Hashrate Is ",
+                 round(max(data$Value)*100/data[1,2]-100,1),
+                 " % Away From All Time High. #BTC #Bitcoin")
+}
 
 # post tweet ___________________________
-post_tweet(status = twitter.text,
+post_tweet(status = paste0(text, " | https://t.me/data_bitcoin"),
            media = "quandl_hashrate.png")
+
+##**************************************
+## Telegram API                     ----
+##**************************************
+
+telegram <- config::get("telegram")
+
+# create bot
+bot <- Bot(token = telegram$token)
+
+# check bot connection
+print(bot$getMe())
+
+
+# send text
+bot$sendPhoto(chat_id = telegram$channel_id, photo = "quandl_hashrate.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))

@@ -236,7 +236,7 @@ create_token(
 ##**************************************
 
 # post tweet ___________________________
-post_tweet(status = paste0(text),
+post_tweet(status = paste0(text, " | https://t.me/data_bitcoin"),
            media = "alternative_fearngreed.png")
 
 ##**************************************
