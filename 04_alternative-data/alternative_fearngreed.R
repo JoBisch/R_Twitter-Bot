@@ -14,7 +14,8 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("rtweet"
+packages <- c("telegram.bot"
+              ,"rtweet"
               ,"dplyr"
               ,"tidyr"
               ,"ggplot2"
@@ -92,6 +93,37 @@ data$date <-
 data$value <- as.integer(data$value)
 
 ##**************************************
+## Text                             ----
+##**************************************
+
+text <- ""
+
+if (data[1,1] <= 25) {
+  text <- paste0("Today Extreme Fear In The Market With A ",
+                 data[1,1], 
+                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
+} else if (data[1,1] < 45) {
+  text <- paste0("Today Fear In The Market With A ",
+                 data[1,1], 
+                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
+  
+} else if (data[1,1] <= 55) {
+  text <- paste0("Today Neutral Sentiment In The Market With A ",
+                 data[1,1], 
+                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
+  
+} else if (data[1,1] <= 75) {
+  text <- paste0("Today Greed In The Market With A ",
+                 data[1,1], 
+                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
+  
+} else {
+  text <- paste0("Today Extreme Greed In The Market With A ",
+                 data[1,1], 
+                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
+}
+
+##**************************************
 ## Plotting                         ----
 ##**************************************
 
@@ -143,7 +175,7 @@ plot <- ggplot(data = data, aes(x = date, y = value)) +
   
   labs(
     title = "#Bitcoin Fear & Greed Index",
-    subtitle = "alternative.me",
+    subtitle = text,
     x = NA,
     y = 'Fear & Greed Index by alternative',
     caption = "@data_bitcoin | red: fear; green: greed | Source: alternative (https://alternative.me/crypto/fear-and-greed-index)"
@@ -203,10 +235,22 @@ create_token(
 ## Post Tweet                       ----
 ##**************************************
 
-# twitter text length max 140
-twitter.text <-
-  paste0("#Bitcoin Fear & Greed Index ", as.character(today), " #BTC")
-
 # post tweet ___________________________
-post_tweet(status = twitter.text,
+post_tweet(status = paste0(text),
            media = "alternative_fearngreed.png")
+
+##**************************************
+## Telegram API                     ----
+##**************************************
+
+telegram <- config::get("telegram")
+
+# create bot
+bot <- Bot(token = telegram$token)
+
+# check bot connection
+print(bot$getMe())
+
+
+# send text
+bot$sendPhoto(chat_id = telegram$channel_id, photo = "alternative_fearngreed.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
