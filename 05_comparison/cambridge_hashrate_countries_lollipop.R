@@ -19,7 +19,8 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("twitteR"
+packages <- c("telegram.bot"
+              ,"rtweet"
               ,"dplyr"
               ,"tidyverse"
               ,"ggplot2"
@@ -80,7 +81,7 @@ emoji.mapping <- read.csv2('custom/mapping_country-emoji.csv')
 ##**************************************
 
 # get and save data  ___________________
-data <- read.csv("https://cbeci.org/api/v1.1.0/download/mining_countries", stringsAsFactors=FALSE)
+data <- read.csv("https://ccaf.io/cbeci/api/v1.1.1/download/mining_countries", stringsAsFactors=FALSE)
 write.csv(data,"data\\cambridge_hashrate_countries.csv", row.names = TRUE)
 
 # clean column names ___________________
@@ -105,6 +106,18 @@ data <- left_join(x=data, y=emoji.mapping, by = "country")
 
 # add id _______________________________
 data$id <- rev(seq.int(nrow(data)))
+
+# text preparation
+country <- str_trim(str_replace_all(data$country[1], "[^[:alnum:]]", " "))
+share <- round(data$thisyear[1], 1)
+
+# text
+text <- paste0(country,
+               " Has With ",
+               share,
+               " % The Highest Share Of Bitcoin Hashrate In ",
+               as.character(format(maxdate, "%B %Y")),
+               ".")
 
 ##**************************************
 ## Preparing images                 ----
@@ -202,8 +215,8 @@ p <- ggplot(data, aes(x = country, y = thisyear)) +
   ) +
   
   labs(
-    title = "Share Of Global Bictoin Hashrate",
-    subtitle = paste0(as.character(format(maxdate, "%B %Y")), " Monthly Average"),
+    title = paste0("Share Of Global Bictoin Hashrate - Monthly Average"),
+    subtitle = text,
     x = "",
     y = '%',
     caption = "@data_bitcoin | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org/mining_map)"
@@ -245,15 +258,48 @@ dev.off()
 twitter <- config::get("twitter")
 
 # twitter login credentuials ___________
+appname <- "gtrendsc"
 consumerKey <- twitter$consumerKey
 consumerSecret <- twitter$consumerSecret
 accessToken <- twitter$accessToken
 accessTokenSecret <- twitter$accessTokenSecret
 
-# connect to twitter ___________________
-setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
+# authenticate via access token ________
+create_token(app = appname,
+             consumer_key = consumerKey,
+             consumer_secret = consumerSecret,
+             access_token = accessToken,
+             access_secret = accessTokenSecret)
+
+##**************************************
+## Post Tweet                       ----
+##**************************************
+
+# twitter text length max 140
+nchar(paste0(text, " #Bitcoin #BTC | https://t.me/data_bitcoin"))
 
 # post tweet ___________________________
-tweet(text = paste0("Share Of Global Bictoin Hashrate By Country (Cambridge Centre for Alternative Finance) ", as.character(maxdate), " #Bitcoin #BTC"), mediaPath = ("cambridge_hashrate_countries_lollipop.png"))
+post_tweet(
+  status = paste0(text, " #Bitcoin #BTC | https://t.me/data_bitcoin"),
+  media = ("cambridge_hashrate_countries_lollipop.png"),
+  
+)
+
+
+##**************************************
+## Telegram API                     ----
+##**************************************
+
+telegram <- config::get("telegram")
+
+# create bot
+bot <- Bot(token = telegram$token)
+
+# check bot connection
+print(bot$getMe())
+
+
+# send text
+bot$sendPhoto(chat_id = telegram$channel_id, photo = "cambridge_hashrate_countries_lollipop.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
 
 
