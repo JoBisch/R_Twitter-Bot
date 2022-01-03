@@ -87,6 +87,27 @@ data$guess <- as.numeric(data$guess)
 
 write.csv(data,"data\\cambridge_electricity-index.csv", row.names = TRUE)
 
+# text
+text <- ""
+
+if (round(tail(data$guess, 1),1) < gold) {
+  text <- paste0("Today With ",
+                 round(tail(data$guess, 1),1), 
+                 " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be ",
+                 round(tail(data$guess, 1)/gold, 1),
+                 " % Lower Than Gold Mining in 2006.")
+} else if (round(tail(data$guess, 1),1) == gold){
+  text <- paste0("Today With ",
+                 round(tail(data$guess, 1),1), 
+                 " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006.")
+} else {
+  text <- paste0("Today With ",
+                 round(tail(data$guess, 1),1), 
+                 " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be ",
+                 round(tail(data$guess, 1)/gold, 1),
+                 " % Higher Than Gold Mining in 2006.")
+}
+
 
 ##**************************************
 ## Plot                             ----
@@ -119,7 +140,7 @@ p <- ggplot(data = data, aes(x = date, y = guess)) +
              ,size=1.5) +
   labs(
     title = "Cambridge Bitcoin Electricity Consumption Index",
-    subtitle = "Comparison To Gold Mining From 2006",
+    subtitle = text,
     x = NA,
     y = 'TWh annualised',
     caption = "@data_bitcoin | Grey Area: Theoretical Lower And Upper Bound | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org)"
@@ -176,26 +197,24 @@ create_token(app = appname,
 ##**************************************
 ## Post Tweet                       ----
 ##**************************************
-gold = 131
-# twitter text length max 140
-text <- ""
 
+# twitter text length max 140
 if (round(tail(data$guess, 1),1) < gold) {
   text <- paste0("Today With ",
                  round(tail(data$guess, 1),1), 
-                 " The #Bitcoin Network Power Demand Is Estimated To Be ",
+                 " TWh The #Bitcoin Network Power Demand Is Estimated To Be ",
                  round(tail(data$guess, 1)/gold, 1),
-                 " % Lower Than Gold Mining in 2006. #BTC")
+                 " % Lower Than Gold Mining in 2006.")
 } else if (round(tail(data$guess, 1),1) == gold){
   text <- paste0("Today With ",
                  round(tail(data$guess, 1),1), 
-                 " The #Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006. #BTC")
+                 " TWh The #Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006.")
 } else {
   text <- paste0("Today With ",
                  round(tail(data$guess, 1),1), 
-                 " The #Bitcoin Network Power Demand Is Estimated To Be ",
+                 " TWh The #Bitcoin Network Power Demand Is Estimated To Be ",
                  round(tail(data$guess, 1)/gold, 1),
-                 " % Higher Than Gold Mining in 2006. #BTC")
+                 " % Higher Than Gold Mining in 2006.")
 }
 
 nchar(paste0(text, " | https://t.me/data_bitcoin"))
