@@ -17,7 +17,8 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("twitteR"
+packages <- c("telegram.bot"
+              ,"rtweet"
               ,"ggplot2"
               ,"lubridate"
               ,"config"
@@ -121,7 +122,7 @@ p <- ggplot(data = data, aes(x = date, y = guess)) +
     subtitle = "Comparison To Gold Mining From 2006",
     x = NA,
     y = 'TWh annualised',
-    caption = "@data_bitcoin | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org)"
+    caption = "@data_bitcoin | Grey Area: Theoretical Lower And Upper Bound | Source: Cambridge Centre for Alternative Finance (https://www.cbeci.org)"
   ) +
   expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0)) +
@@ -159,15 +160,66 @@ dev.off()
 twitter <- config::get("twitter")
 
 # twitter login credentuials ___________
+appname <- "gtrendsc"
 consumerKey <- twitter$consumerKey
 consumerSecret <- twitter$consumerSecret
 accessToken <- twitter$accessToken
 accessTokenSecret <- twitter$accessTokenSecret
 
-# connect to twitter ___________________
-setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
+# authenticate via access token ________
+create_token(app = appname,
+             consumer_key = consumerKey,
+             consumer_secret = consumerSecret,
+             access_token = accessToken,
+             access_secret = accessTokenSecret)
+
+##**************************************
+## Post Tweet                       ----
+##**************************************
+gold = 131
+# twitter text length max 140
+text <- ""
+
+if (round(tail(data$guess, 1),1) < gold) {
+  text <- paste0("Today With ",
+                 round(tail(data$guess, 1),1), 
+                 " The #Bitcoin Network Power Demand Is Estimated To Be ",
+                 round(tail(data$guess, 1)/gold, 1),
+                 " % Lower Than Gold Mining in 2006. #BTC")
+} else if (round(tail(data$guess, 1),1) == gold){
+  text <- paste0("Today With ",
+                 round(tail(data$guess, 1),1), 
+                 " The #Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006. #BTC")
+} else {
+  text <- paste0("Today With ",
+                 round(tail(data$guess, 1),1), 
+                 " The #Bitcoin Network Power Demand Is Estimated To Be ",
+                 round(tail(data$guess, 1)/gold, 1),
+                 " % Higher Than Gold Mining in 2006. #BTC")
+}
+
+nchar(paste0(text, " | https://t.me/data_bitcoin"))
 
 # post tweet ___________________________
-tweet(text = paste0("Cambridge Bitcoin Electricity Consumption Index (Cambridge Centre for Alternative Finance) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("cambridge_electricity-index_gold.png"))
+post_tweet(
+  status = paste0(text, " | https://t.me/data_bitcoin"),
+  media = ("cambridge_electricity-index_gold.png"),
+  
+)
 
 
+##**************************************
+## Telegram API                     ----
+##**************************************
+
+telegram <- config::get("telegram")
+
+# create bot
+bot <- Bot(token = telegram$token)
+
+# check bot connection
+print(bot$getMe())
+
+
+# send text
+bot$sendPhoto(chat_id = telegram$channel_id, photo = "cambridge_electricity-index_gold.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
