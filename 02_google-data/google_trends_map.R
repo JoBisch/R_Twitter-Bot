@@ -15,7 +15,8 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("rtweet"
+packages <- c("telegram.bot"
+              ,"rtweet"
               ,"gtrendsR"
               ,"lubridate"
               ,"config"
@@ -130,22 +131,41 @@ accessToken <- twitter$accessToken
 accessTokenSecret <- twitter$accessTokenSecret
 
 # authenticate via access token ________
-create_token(app = appname,
-             consumer_key = consumerKey,
-             consumer_secret = consumerSecret,
-             access_token = accessToken,
-             access_secret = accessTokenSecret)
+create_token(
+  app = appname,
+  consumer_key = consumerKey,
+  consumer_secret = consumerSecret,
+  access_token = accessToken,
+  access_secret = accessTokenSecret
+)
 
 ##**************************************
 ## Post Tweet                       ----
 ##**************************************
 
-# twitter text length max 140
-twitter.text <- paste0("Worldwide Bitcoin Interest (Google Trends) ", as.character(today), " #Bitcoin #BTC")
+text <- paste0(paste(head(countries[order(-countries$hits), ]$location, 3), collapse = ", "),
+                 " - Countries With The Highest Worldwide Google #Bitcoin Interest.")
+
+
+nchar(paste0(text, " | https://t.me/data_bitcoin"))
 
 # post tweet ___________________________
-post_tweet(
-  status = twitter.text,
-  media = ("google_trends_world_map.png"),
-  
-)
+post_tweet(status = paste0(text, " | https://t.me/data_bitcoin"),
+           media = "google_trends_world_map.png")
+
+##**************************************
+## Telegram API                     ----
+##**************************************
+
+telegram <- config::get("telegram")
+
+# create bot
+bot <- Bot(token = telegram$token)
+
+# check bot connection
+print(bot$getMe())
+
+
+# send text
+bot$sendPhoto(chat_id = telegram$channel_id, photo = "google_trends_world_map.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
+

@@ -21,8 +21,9 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("gtrendsR"
-              ,"twitteR"
+packages <- c("telegram.bot"
+              ,"rtweet"
+              ,"gtrendsR"
               ,"ggplot2"
               ,"lubridate"
               ,"config"
@@ -158,15 +159,68 @@ dev.off()
 twitter <- config::get("twitter")
 
 # twitter login credentuials ___________
+appname <- "gtrendsc"
 consumerKey <- twitter$consumerKey
 consumerSecret <- twitter$consumerSecret
 accessToken <- twitter$accessToken
 accessTokenSecret <- twitter$accessTokenSecret
 
-# connect to twitter ___________________
-setup_twitter_oauth(consumerKey,consumerSecret,accessToken,accessTokenSecret)
+# authenticate via access token ________
+create_token(
+  app = appname,
+  consumer_key = consumerKey,
+  consumer_secret = consumerSecret,
+  access_token = accessToken,
+  access_secret = accessTokenSecret
+)
+
+##**************************************
+## Post Tweet                       ----
+##**************************************
+
+text = ""
+
+btc.interest.now <- tail(gtrends.data.interest$hits,1)
+
+btc.interest.last.year <- head(tail(gtrends.data.interest,53),1)$hits
+
+if (btc.interest.now > btc.interest.last.year) {
+  text <- paste0("With ",
+                 btc.interest.now,
+                 " The Worldwide Google #Bitcoin Interest Is ",
+                 round(btc.interest.now*100/btc.interest.last.year-1, 1),
+                 " % Higher Than A Year Ago. #BTC")
+} else if (btc.interest.now == btc.interest.last.year) {
+  text <- paste0("With ",
+                 btc.interest.now,
+                 " The Worldwide Google #Bitcoin Interest Is The Same As Last Year. #BTC")
+} else {
+  text <- paste0("With ",
+                 btc.interest.now,
+                 " The Worldwide Google #Bitcoin Interest Is ",
+                 round(btc.interest.now*100/btc.interest.last.year-1, 1),
+                 " % Lower Than A Year Ago. #BTC")
+}
+
+nchar(paste0(text, " | https://t.me/data_bitcoin"))
 
 # post tweet ___________________________
-tweet(text = paste0("Worldwide Bitcoin Interest Over Time (Google Trends) ", as.character(today), " #Bitcoin #BTC"), mediaPath = ("google_trends_5y.png"))
+post_tweet(status = paste0(text, " | https://t.me/data_bitcoin"),
+           media = "google_trends_5y.png")
 
+##**************************************
+## Telegram API                     ----
+##**************************************
+
+telegram <- config::get("telegram")
+
+# create bot
+bot <- Bot(token = telegram$token)
+
+# check bot connection
+print(bot$getMe())
+
+
+# send text
+bot$sendPhoto(chat_id = telegram$channel_id, photo = "google_trends_5y.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
 
