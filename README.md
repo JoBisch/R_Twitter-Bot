@@ -29,6 +29,9 @@ Folder Sturcture:
 	- (tbd) Transactions number and EUR/USD Value on BTC Blockchain and Lightning
 	- (tbd) Ark metrices
 
+Sources:
+- icons: https://icons8.de/icon/set/logo/plasticine
+- emojis: https://www.getemojis.net/html/
 
 
 

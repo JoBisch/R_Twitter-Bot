@@ -15,3 +15,5 @@
 0 15 8 * * sudo Rscript '/home/R_Twitter-Bot/05_comparison/cambridge_electricity-index_gold.R'
 
 0 18 01 * * sudo Rscript '/home/R_Twitter-Bot/05_comparison/cambridge_hashrate_countries_lollipop.R'
+
+0 13 * * * sudo Rscript '/home/R_Twitter-Bot/98_news/news-cointelegraph.R'
