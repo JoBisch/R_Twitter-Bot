@@ -19,30 +19,48 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("telegram.bot"
-              ,"rtweet"
-              ,"dplyr"
-              ,"tidyverse"
-              ,"ggplot2"
-              ,"ggimage"
-              ,"ggtext"
-              ,"ggrepel"
-              ,"lubridate"
-              ,"config"
-              ,"rstudioapi"
-              ,"hrbrthemes"
-              ,"magick"
-              ,"Cairo"
-              ,"emojifont"
-              ,"reshape"
-              ,"cowplot")
+packages <- c(
+  "telegram.bot"
+  ,
+  "rtweet"
+  ,
+  "dplyr"
+  ,
+  "tidyverse"
+  ,
+  "ggplot2"
+  ,
+  "ggimage"
+  ,
+  "ggtext"
+  ,
+  "ggrepel"
+  ,
+  "lubridate"
+  ,
+  "config"
+  ,
+  "rstudioapi"
+  ,
+  "hrbrthemes"
+  ,
+  "magick"
+  ,
+  "Cairo"
+  ,
+  "emojifont"
+  ,
+  "reshape"
+  ,
+  "cowplot"
+)
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
 
-ipak <- function(pkg){
+ipak <- function(pkg) {
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
-  if (length(new.pkg)) 
+  if (length(new.pkg))
     install.packages(new.pkg, dependencies = TRUE)
   sapply(pkg, require, character.only = TRUE)
 }
@@ -81,8 +99,10 @@ emoji.mapping <- read.csv2('custom/mapping_country-emoji.csv')
 ##**************************************
 
 # get and save data  ___________________
-data <- read.csv("https://ccaf.io/cbeci/api/v1.1.1/download/mining_countries", stringsAsFactors=FALSE)
-write.csv(data,"data\\cambridge_hashrate_countries.csv", row.names = TRUE)
+data <-
+  read.csv("https://ccaf.io/cbeci/api/v1.1.1/download/mining_countries",
+           stringsAsFactors = FALSE)
+write.csv(data, "data\\cambridge_hashrate_countries.csv", row.names = TRUE)
 
 # clean column names ___________________
 names(data) <- tolower(names(data))
@@ -93,31 +113,36 @@ data$date <-
 
 # select relevant data _________________
 maxdate <- max(data$date)
-data <- subset(data, date==max(data$date) | date==max(data$date) %m-% months(12))
+data <-
+  subset(data,
+         date == max(data$date) | date == max(data$date) %m-% months(12))
 
 # transform data _______________________
 data <- cast(data, country ~ date)
-data <- data[order(data[,3], decreasing = TRUE),]
+data <- data[order(data[, 3], decreasing = TRUE), ]
 colnames(data)[2] <- "lastyear"
 colnames(data)[3] <- "thisyear"
 
 # join emoji location __________________
-data <- left_join(x=data, y=emoji.mapping, by = "country")
+data <- left_join(x = data, y = emoji.mapping, by = "country")
 
 # add id _______________________________
 data$id <- rev(seq.int(nrow(data)))
 
 # text preparation
-country <- str_trim(str_replace_all(data$country[1], "[^[:alnum:]]", " "))
+country <-
+  str_trim(str_replace_all(data$country[1], "[^[:alnum:]]", " "))
 share <- round(data$thisyear[1], 1)
 
 # text
-text <- paste0(country,
-               " Has With ",
-               share,
-               " % The Highest Share Of Bitcoin Hashrate In ",
-               as.character(format(maxdate, "%B %Y")),
-               ".")
+text <- paste0(
+  country,
+  " Has With ",
+  share,
+  " % The Highest Share Of Bitcoin Hashrate In ",
+  as.character(format(maxdate, "%B %Y")),
+  "."
+)
 
 ##**************************************
 ## Preparing images                 ----
@@ -125,11 +150,12 @@ text <- paste0(country,
 
 labels <- c()
 
-for (i in 1:length(data$emoji)){
-  
+for (i in 1:length(data$emoji)) {
   img.name <- data$ALPHA.3[i]
   
-  labels <- c(labels, paste0("<img src='", data$emoji[i],  "' width='15' /><br>", img.name))
+  labels <-
+    c(labels,
+      paste0("<img src='", data$emoji[i],  "' width='15' /><br>", img.name))
   
 }
 
@@ -138,13 +164,17 @@ for (i in 1:length(data$emoji)){
 ##**************************************
 
 Cairo::Cairo(
-  1200, #length
-  900, #width
+  1200,
+  #length
+  900,
+  #width
   file = paste("cambridge_hashrate_countries_lollipop", ".png", sep = ""),
-  type = "png", #tiff
-  bg = "white", #white or transparent depending on your requirement 
+  type = "png",
+  #tiff
+  bg = "white",
+  #white or transparent depending on your requirement
   dpi = 140,
-  units = "px" #you can change to pixels etc 
+  units = "px" #you can change to pixels etc
 )
 
 p <- ggplot(data, aes(x = country, y = thisyear)) +
@@ -205,7 +235,7 @@ p <- ggplot(data, aes(x = country, y = thisyear)) +
   ) +
   
   scale_y_continuous(expand = expansion(mult = c(0, .05))) +
-
+  
   coord_flip() +
   theme_ipsum() +
   theme(
@@ -236,7 +266,7 @@ p <- ggplot(data, aes(x = country, y = thisyear)) +
 
 # add logos to y axis: https://stackoverflow.com/questions/68747698/ggplot2-images-as-y-axis-labels-solved/68751201#68751201
 p <- p +   scale_x_discrete(name = NULL,
-                       labels = rev(labels)) +
+                            labels = rev(labels)) +
   theme(axis.text.y = element_markdown(color = "black", size = 11))
 
 p
@@ -244,7 +274,13 @@ p
 # add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
 logo <- image_read("../pics/logo_twitter-account.jpg")
 
-grid::grid.raster(logo, x = 0.07, y = 0.03, just = c('left', 'bottom'), width = unit(0.5, 'inches'))
+grid::grid.raster(
+  logo,
+  x = 0.07,
+  y = 0.03,
+  just = c('left', 'bottom'),
+  width = unit(0.5, 'inches')
+)
 dev.off()
 
 # save plot ____________________________
@@ -265,11 +301,13 @@ accessToken <- twitter$accessToken
 accessTokenSecret <- twitter$accessTokenSecret
 
 # authenticate via access token ________
-create_token(app = appname,
-             consumer_key = consumerKey,
-             consumer_secret = consumerSecret,
-             access_token = accessToken,
-             access_secret = accessTokenSecret)
+create_token(
+  app = appname,
+  consumer_key = consumerKey,
+  consumer_secret = consumerSecret,
+  access_token = accessToken,
+  access_secret = accessTokenSecret
+)
 
 ##**************************************
 ## Post Tweet                       ----
@@ -300,6 +338,10 @@ print(bot$getMe())
 
 
 # send text
-bot$sendPhoto(chat_id = telegram$channel_id, photo = "cambridge_hashrate_countries_lollipop.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
-
+bot$sendPhoto(
+  chat_id = telegram$channel_id,
+  photo = "cambridge_hashrate_countries_lollipop.png",
+  caption = paste0(text, "\n\n\U0001F916 <a href=\"https://twitter.com/data_bitcoin\">@data_bitcoin</a>"),
+  parse_mode = "HTML"
+)
 

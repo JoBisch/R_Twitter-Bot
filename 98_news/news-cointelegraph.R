@@ -106,7 +106,7 @@ text <- paste0(
 ## Telegram API                     ----
 ##**************************************
 
-telegram <- config::get("telegram.test")
+telegram <- config::get("telegram")
 
 # create bot
 bot <- Bot(token = telegram$token)

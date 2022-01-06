@@ -1,6 +1,6 @@
-30 10 1-31/2 * * sudo Rscript '/home/R_Twitter-Bot/01_twitter-data/twitter_sentiment-analysis.R'
+30 10 * * 4 sudo Rscript '/home/R_Twitter-Bot/01_twitter-data/twitter_sentiment-analysis.R'
 
-0 11 * * 1,4 sudo Rscript '/home/R_Twitter-Bot/01_twitter-data/twitter_word-cloud.R'
+0 11 * * 4 sudo Rscript '/home/R_Twitter-Bot/01_twitter-data/twitter_word-cloud.R'
 
 0 10 * * * sudo Rscript '/home/R_Twitter-Bot/02_google-data/google_trends.R'
 

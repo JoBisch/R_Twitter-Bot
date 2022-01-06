@@ -6,7 +6,7 @@
 ##                                    ##
 ##**************************************
 
-# Cambridge Bitcoin Electricity Consumption Index: https://cbeci.org 
+# Cambridge Bitcoin Electricity Consumption Index: https://cbeci.org
 
 ## clear the cache _____________________
 
@@ -17,22 +17,32 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("telegram.bot"
-              ,"rtweet"
-              ,"ggplot2"
-              ,"lubridate"
-              ,"config"
-              ,"rstudioapi"
-              ,"hrbrthemes"
-              ,"magick"
-              ,"Cairo")
+packages <- c(
+  "telegram.bot"
+  ,
+  "rtweet"
+  ,
+  "ggplot2"
+  ,
+  "lubridate"
+  ,
+  "config"
+  ,
+  "rstudioapi"
+  ,
+  "hrbrthemes"
+  ,
+  "magick"
+  ,
+  "Cairo"
+)
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
 
-ipak <- function(pkg){
+ipak <- function(pkg) {
   new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
-  if (length(new.pkg)) 
+  if (length(new.pkg))
     install.packages(new.pkg, dependencies = TRUE)
   sapply(pkg, require, character.only = TRUE)
 }
@@ -71,11 +81,13 @@ gold = 131
 ##**************************************
 
 # get data  ____________________________
-data <- read.csv("https://cbeci.org/api/v1.1.0/download/data?price=0.06", stringsAsFactors=FALSE)
+data <-
+  read.csv("https://cbeci.org/api/v1.1.0/download/data?price=0.06",
+           stringsAsFactors = FALSE)
 
 # clean columns ________________________
 names(data) <- c("timestamp", "datetime", "max", "min", "guess")
-data <- data[-1,]
+data <- data[-1, ]
 
 # assign data types ____________________
 data$date <-
@@ -85,27 +97,33 @@ data$max <- as.numeric(data$max)
 data$min <- as.numeric(data$min)
 data$guess <- as.numeric(data$guess)
 
-write.csv(data,"data\\cambridge_electricity-index.csv", row.names = TRUE)
+write.csv(data, "data\\cambridge_electricity-index.csv", row.names = TRUE)
 
 # text
 text <- ""
 
-if (round(tail(data$guess, 1),1) < gold) {
-  text <- paste0("Today With ",
-                 round(tail(data$guess, 1),1), 
-                 " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be ",
-                 round(tail(data$guess, 1)/gold, 1),
-                 " % Lower Than Gold Mining in 2006.")
-} else if (round(tail(data$guess, 1),1) == gold){
-  text <- paste0("Today With ",
-                 round(tail(data$guess, 1),1), 
-                 " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006.")
+if (round(tail(data$guess, 1), 1) < gold) {
+  text <- paste0(
+    "Today With ",
+    round(tail(data$guess, 1), 1),
+    " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be ",
+    round(tail(data$guess, 1) / gold, 1),
+    " % Lower Than Gold Mining in 2006."
+  )
+} else if (round(tail(data$guess, 1), 1) == gold) {
+  text <- paste0(
+    "Today With ",
+    round(tail(data$guess, 1), 1),
+    " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006."
+  )
 } else {
-  text <- paste0("Today With ",
-                 round(tail(data$guess, 1),1), 
-                 " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be ",
-                 round(tail(data$guess, 1)/gold, 1),
-                 " % Higher Than Gold Mining in 2006.")
+  text <- paste0(
+    "Today With ",
+    round(tail(data$guess, 1), 1),
+    " TWh annualised The Bitcoin Network Power Demand Is Estimated To Be ",
+    round(tail(data$guess, 1) / gold, 1),
+    " % Higher Than Gold Mining in 2006."
+  )
 }
 
 
@@ -114,30 +132,46 @@ if (round(tail(data$guess, 1),1) < gold) {
 ##**************************************
 
 Cairo::Cairo(
-  24, #length
-  16, #width
+  24,
+  #length
+  16,
+  #width
   file = paste("cambridge_electricity-index_gold", ".png", sep = ""),
-  type = "png", #tiff
-  bg = "white", #white or transparent depending on your requirement 
+  type = "png",
+  #tiff
+  bg = "white",
+  #white or transparent depending on your requirement
   dpi = 300,
-  units = "cm" #you can change to pixels etc 
+  units = "cm" #you can change to pixels etc
 )
 
 # bitcoin google trends plot 5 years ___
 p <- ggplot(data = data, aes(x = date, y = guess)) +
   geom_ribbon(aes(ymin = min, ymax = max), fill = "grey") +
   geom_line(color = "black", size = 0.5) +
-  geom_hline(yintercept=gold, color = "#3b3b3b") +
-  annotate("text"
-           , x = data$date[100] 
-           , y=gold+10
-           , size = 3.5
-           , label = "Gold mining (2006)"
-           , color = "#3b3b3b") +
-  geom_point(data=tail(data, n=1)
-             ,aes(x=date, y=guess)
-             ,colour="black"
-             ,size=1.5) +
+  geom_hline(yintercept = gold, color = "#3b3b3b") +
+  annotate(
+    "text"
+    ,
+    x = data$date[100]
+    ,
+    y = gold + 10
+    ,
+    size = 3.5
+    ,
+    label = "Gold mining (2006)"
+    ,
+    color = "#3b3b3b"
+  ) +
+  geom_point(
+    data = tail(data, n = 1)
+    ,
+    aes(x = date, y = guess)
+    ,
+    colour = "black"
+    ,
+    size = 1.5
+  ) +
   labs(
     title = "Cambridge Bitcoin Electricity Consumption Index",
     subtitle = text,
@@ -167,7 +201,13 @@ p
 # add logo to plot and save as png: https://michaeltoth.me/you-need-to-start-branding-your-graphs-heres-how-with-ggplot.html
 logo <- image_read("../pics/logo_twitter-account.jpg")
 
-grid::grid.raster(logo, x = 0.07, y = 0.03, just = c('left', 'bottom'), width = unit(0.5, 'inches'))
+grid::grid.raster(
+  logo,
+  x = 0.07,
+  y = 0.03,
+  just = c('left', 'bottom'),
+  width = unit(0.5, 'inches')
+)
 dev.off()
 
 # save plot ____________________________
@@ -188,33 +228,41 @@ accessToken <- twitter$accessToken
 accessTokenSecret <- twitter$accessTokenSecret
 
 # authenticate via access token ________
-create_token(app = appname,
-             consumer_key = consumerKey,
-             consumer_secret = consumerSecret,
-             access_token = accessToken,
-             access_secret = accessTokenSecret)
+create_token(
+  app = appname,
+  consumer_key = consumerKey,
+  consumer_secret = consumerSecret,
+  access_token = accessToken,
+  access_secret = accessTokenSecret
+)
 
 ##**************************************
 ## Post Tweet                       ----
 ##**************************************
 
 # twitter text length max 140
-if (round(tail(data$guess, 1),1) < gold) {
-  text <- paste0("Today With ",
-                 round(tail(data$guess, 1),1), 
-                 " TWh The #Bitcoin Network Power Demand Is Estimated To Be ",
-                 round(tail(data$guess, 1)/gold, 1),
-                 " % Lower Than Gold Mining in 2006.")
-} else if (round(tail(data$guess, 1),1) == gold){
-  text <- paste0("Today With ",
-                 round(tail(data$guess, 1),1), 
-                 " TWh The #Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006.")
+if (round(tail(data$guess, 1), 1) < gold) {
+  text <- paste0(
+    "Today With ",
+    round(tail(data$guess, 1), 1),
+    " TWh The #Bitcoin Network Power Demand Is Estimated To Be ",
+    round(tail(data$guess, 1) / gold, 1),
+    " % Lower Than Gold Mining in 2006."
+  )
+} else if (round(tail(data$guess, 1), 1) == gold) {
+  text <- paste0(
+    "Today With ",
+    round(tail(data$guess, 1), 1),
+    " TWh The #Bitcoin Network Power Demand Is Estimated To Be As High As Gold Mining in 2006."
+  )
 } else {
-  text <- paste0("Today With ",
-                 round(tail(data$guess, 1),1), 
-                 " TWh The #Bitcoin Network Power Demand Is Estimated To Be ",
-                 round(tail(data$guess, 1)/gold, 1),
-                 " % Higher Than Gold Mining in 2006.")
+  text <- paste0(
+    "Today With ",
+    round(tail(data$guess, 1), 1),
+    " TWh The #Bitcoin Network Power Demand Is Estimated To Be ",
+    round(tail(data$guess, 1) / gold, 1),
+    " % Higher Than Gold Mining in 2006."
+  )
 }
 
 nchar(paste0(text, " | https://t.me/data_bitcoin"))
@@ -241,4 +289,9 @@ print(bot$getMe())
 
 
 # send text
-bot$sendPhoto(chat_id = telegram$channel_id, photo = "cambridge_electricity-index_gold.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
+bot$sendPhoto(
+  chat_id = telegram$channel_id,
+  photo = "cambridge_electricity-index_gold.png",
+  caption = paste0(text, "\n\n\U0001F916 <a href=\"https://twitter.com/data_bitcoin\">@data_bitcoin</a>"),
+  parse_mode = "HTML"
+)

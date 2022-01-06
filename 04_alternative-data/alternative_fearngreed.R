@@ -14,19 +14,33 @@ rm(list = ls())
 ##**************************************
 
 # packages _____________________________
-packages <- c("telegram.bot"
-              ,"rtweet"
-              ,"dplyr"
-              ,"tidyr"
-              ,"ggplot2"
-              ,"httr"
-              ,"jsonlite"
-              ,"lubridate"
-              ,"grid"
-              ,"RColorBrewer"
-              ,"hrbrthemes"
-              ,"magick"
-              ,"Cairo")
+packages <- c(
+  "telegram.bot"
+  ,
+  "rtweet"
+  ,
+  "dplyr"
+  ,
+  "tidyr"
+  ,
+  "ggplot2"
+  ,
+  "httr"
+  ,
+  "jsonlite"
+  ,
+  "lubridate"
+  ,
+  "grid"
+  ,
+  "RColorBrewer"
+  ,
+  "hrbrthemes"
+  ,
+  "magick"
+  ,
+  "Cairo"
+)
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -98,29 +112,35 @@ data$value <- as.integer(data$value)
 
 text <- ""
 
-if (data[1,1] <= 25) {
-  text <- paste0("Today Extreme Fear In The Market With A ",
-                 data[1,1], 
-                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
-} else if (data[1,1] < 45) {
+if (data[1, 1] <= 25) {
+  text <- paste0(
+    "Today Extreme Fear In The Market With A ",
+    data[1, 1],
+    " Bitcoin Fear & Greed Index. #BTC #Bitcoin"
+  )
+} else if (data[1, 1] < 45) {
   text <- paste0("Today Fear In The Market With A ",
-                 data[1,1], 
+                 data[1, 1],
                  " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
   
-} else if (data[1,1] <= 55) {
-  text <- paste0("Today Neutral Sentiment In The Market With A ",
-                 data[1,1], 
-                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
+} else if (data[1, 1] <= 55) {
+  text <- paste0(
+    "Today Neutral Sentiment In The Market With A ",
+    data[1, 1],
+    " Bitcoin Fear & Greed Index. #BTC #Bitcoin"
+  )
   
-} else if (data[1,1] <= 75) {
+} else if (data[1, 1] <= 75) {
   text <- paste0("Today Greed In The Market With A ",
-                 data[1,1], 
+                 data[1, 1],
                  " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
   
 } else {
-  text <- paste0("Today Extreme Greed In The Market With A ",
-                 data[1,1], 
-                 " Bitcoin Fear & Greed Index. #BTC #Bitcoin")
+  text <- paste0(
+    "Today Extreme Greed In The Market With A ",
+    data[1, 1],
+    " Bitcoin Fear & Greed Index. #BTC #Bitcoin"
+  )
 }
 
 ##**************************************
@@ -128,7 +148,8 @@ if (data[1,1] <= 25) {
 ##**************************************
 
 # own color palette
-redgreen <- rev(c("#FF8080", "#FFBF80", "#FFFF80", "#BFFF80", "#80FF80"))
+redgreen <-
+  rev(c("#FF8080", "#FFBF80", "#FFFF80", "#BFFF80", "#80FF80"))
 
 # background color ____________
 g <-
@@ -143,13 +164,17 @@ g <-
 
 # cairo plot specification
 Cairo::Cairo(
-  28, #length
-  18, #width
+  28,
+  #length
+  18,
+  #width
   file = paste("alternative_fearngreed", ".png", sep = ""),
-  type = "png", #tiff
-  bg = "white", #white or transparent depending on your requirement 
+  type = "png",
+  #tiff
+  bg = "white",
+  #white or transparent depending on your requirement
   dpi = 300,
-  units = "cm" #you can change to pixels etc 
+  units = "cm" #you can change to pixels etc
 )
 
 
@@ -165,12 +190,19 @@ plot <- ggplot(data = data, aes(x = date, y = value)) +
   
   geom_line(color = "black", size = 0.5) +
   
-  geom_point(data=data[1:1, ]
-             ,aes(x=date, y=value)
-             ,colour="black"
-             ,size=4.5
-             ,stroke=2.1
-             ,shape=1) +
+  geom_point(
+    data = data[1:1,]
+    ,
+    aes(x = date, y = value)
+    ,
+    colour = "black"
+    ,
+    size = 4.5
+    ,
+    stroke = 2.1
+    ,
+    shape = 1
+  ) +
   
   
   labs(
@@ -189,7 +221,7 @@ plot <- ggplot(data = data, aes(x = date, y = value)) +
     plot.title = element_text(color = "#f7931b"),
     plot.subtitle = element_text(color = "#3b3b3b"),
     plot.caption = element_text(color = "#646464", face = 'bold')
-  ) 
+  )
 
 plot
 
@@ -253,4 +285,9 @@ print(bot$getMe())
 
 
 # send text
-bot$sendPhoto(chat_id = telegram$channel_id, photo = "alternative_fearngreed.png", caption = paste0(text, " | https://twitter.com/data_bitcoin"))
+bot$sendPhoto(
+  chat_id = telegram$channel_id,
+  photo = "alternative_fearngreed.png",
+  caption = paste0(text, "\n\n\U0001F916 <a href=\"https://twitter.com/data_bitcoin\">@data_bitcoin</a>"),
+  parse_mode = "HTML"
+)
