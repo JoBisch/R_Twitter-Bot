@@ -82,8 +82,6 @@ link <- qdapRegex::ex_between(content, "<link>", "</link")[[1]][3:7]
 links <- ""
 
 for (x in 1:5) {
-  print(x)
-  print(links)
   links <- paste0(links,
                   x,
                   ". <a href=\"",

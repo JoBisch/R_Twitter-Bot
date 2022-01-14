@@ -156,10 +156,10 @@ plot <- ggplot(data = data, aes(x = Date, y = Value)) +
   ) +
   
   labs(
-    title = "#Bitcoin Hash Rate (TH/s)",
+    title = "#Bitcoin Hash Rate (EH/s)",
     subtitle = "100-day Simple Moving Average",
     x = NA,
-    y = 'Hash Rate (TH/s)',
+    y = 'Hash Rate (EH/s)',
     caption = "@data_bitcoin | Source: Quandl (https://www.quandl.com/data/BCHAIN/HRATE-Bitcoin-Hash-Rate)"
   ) +
   
@@ -233,13 +233,13 @@ if (data[1, 2] == max(data$Value)) {
   text <- paste0(
     "Today With ",
     round(data[1, 2], 1),
-    " TH/s The Bitcoin Hashrate Reached A New All Time High. #BTC #Bitcoin"
+    " EH/s The Bitcoin Hashrate Reached A New All Time High. #BTC #Bitcoin"
   )
 } else {
   text <- paste0(
     "Today With ",
     round(data[1, 2], 1),
-    " TH/s The Bitcoin Hashrate Is ",
+    " EH/s The Bitcoin Hashrate Is ",
     round(max(data$Value) * 100 / data[1, 2] - 100, 1),
     " % Away From All Time High. #BTC #Bitcoin"
   )
