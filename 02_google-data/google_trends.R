@@ -22,24 +22,15 @@ rm(list = ls())
 
 # packages _____________________________
 packages <- c(
-  "telegram.bot"
-  ,
-  "rtweet"
-  ,
-  "gtrendsR"
-  ,
-  "ggplot2"
-  ,
-  "lubridate"
-  ,
-  "config"
-  ,
-  "rstudioapi"
-  ,
-  "hrbrthemes"
-  ,
-  "magick"
-  ,
+  "telegram.bot",
+  "rtweet",
+  "gtrendsR",
+  "ggplot2",
+  "lubridate",
+  "config",
+  "rstudioapi",
+  "hrbrthemes",
+  "magick",
   "Cairo"
 )
 
@@ -115,6 +106,44 @@ gtrends.data <-
 gtrends.data.interest <- gtrends.data$interest_over_time
 
 ##**************************************
+## Interpretation                   ----
+##**************************************
+
+text = ""
+
+btc.interest.now <- tail(gtrends.data.interest$hits, 1)
+
+btc.interest.last.year <-
+  head(tail(gtrends.data.interest, 53), 1)$hits
+
+if (btc.interest.now > btc.interest.last.year) {
+  text <- paste0(
+    "With ",
+    btc.interest.now,
+    " The Worldwide Google Bitcoin Interest Is ",
+    round(btc.interest.now * 100 / btc.interest.last.year -
+            1, 1),
+    " % Higher Than A Year Ago."
+  )
+} else if (btc.interest.now == btc.interest.last.year) {
+  text <- paste0(
+    "With ",
+    btc.interest.now,
+    " The Worldwide Google Bitcoin Interest Is The Same As Last Year."
+  )
+} else {
+  text <- paste0(
+    "With ",
+    btc.interest.now,
+    " The Worldwide Google Bitcoin Interest Is ",
+    round(btc.interest.now * 100 / btc.interest.last.year -
+            1, 1),
+    " % Lower Than A Year Ago."
+  )
+}
+
+
+##**************************************
 ## Plot                             ----
 ##**************************************
 
@@ -137,7 +166,7 @@ p <- ggplot(data = gtrends.data.interest, aes(x = date, y = hits)) +
   geom_line(color = "black", size = 0.5) +
   labs(
     title = "Worldwide Bitcoin Interest Over Time",
-    subtitle = "Google Trends",
+    subtitle = text,
     x = NA,
     y = 'Relative Interest',
     caption = "@data_bitcoin | Source: Google Trends (https://www.google.com/trends)"
@@ -175,6 +204,17 @@ grid::grid.raster(
   just = c('left', 'bottom'),
   width = unit(0.5, 'inches')
 )
+
+watermark <- image_read("../pics/icons/icons8-google-logo-250_alpha.png")
+
+grid::grid.raster(
+  watermark,
+  x = 0.5,
+  y = 0.5,
+  just = c('centre', 'centre'),
+  width = unit(2, 'inches')
+)
+
 dev.off()
 
 # save plot ____________________________
@@ -207,43 +247,12 @@ create_token(
 ## Post Tweet                       ----
 ##**************************************
 
-text = ""
+text.twitter <- gsub("Bitcoin", "#Bitcoin", paste0(text, " #BTC | https://t.me/data_bitcoin"))
 
-btc.interest.now <- tail(gtrends.data.interest$hits, 1)
-
-btc.interest.last.year <-
-  head(tail(gtrends.data.interest, 53), 1)$hits
-
-if (btc.interest.now > btc.interest.last.year) {
-  text <- paste0(
-    "With ",
-    btc.interest.now,
-    " The Worldwide Google #Bitcoin Interest Is ",
-    round(btc.interest.now * 100 / btc.interest.last.year -
-            1, 1),
-    " % Higher Than A Year Ago. #BTC"
-  )
-} else if (btc.interest.now == btc.interest.last.year) {
-  text <- paste0(
-    "With ",
-    btc.interest.now,
-    " The Worldwide Google #Bitcoin Interest Is The Same As Last Year. #BTC"
-  )
-} else {
-  text <- paste0(
-    "With ",
-    btc.interest.now,
-    " The Worldwide Google #Bitcoin Interest Is ",
-    round(btc.interest.now * 100 / btc.interest.last.year -
-            1, 1),
-    " % Lower Than A Year Ago. #BTC"
-  )
-}
-
-nchar(paste0(text, " | https://t.me/data_bitcoin"))
+nchar(text.twitter)
 
 # post tweet ___________________________
-post_tweet(status = paste0(text, " | https://t.me/data_bitcoin"),
+post_tweet(status = text.twitter,
            media = "google_trends_5y.png")
 
 ##**************************************
