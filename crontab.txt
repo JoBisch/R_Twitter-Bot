@@ -16,4 +16,6 @@
 
 0 18 01 * * sudo Rscript '/home/R_Twitter-Bot/05_comparison/cambridge_hashrate_countries_lollipop.R'
 
+25 11 * * 1 sudo Rscript '/home/R_Twitter-Bot/06_reddit-data/reddit-subscriber.R'
+
 0 13 * * * sudo Rscript '/home/R_Twitter-Bot/98_news/news-cointelegraph.R'
