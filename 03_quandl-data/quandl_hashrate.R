@@ -38,6 +38,8 @@ packages <- c(
   "Cairo"
 )
 
+print("package vector created")
+
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -51,6 +53,8 @@ ipak <- function(pkg) {
 
 # usage ________________________________
 ipak(packages)
+
+print("package loaded")
 
 ##**************************************
 ## Sets working directory           ----
@@ -69,6 +73,8 @@ if (Sys.getenv("RSTUDIO") == "1") {
 }
 
 setwd(wd)
+
+print("wd set")
 
 # variable today _______________________
 today <- Sys.Date()
@@ -109,6 +115,8 @@ ma <- rollmean(temp.zoo, 100, fill = list(NA, NULL, NA))
 
 # Add calculated moving averages to existing data frame
 data$ma = coredata(ma)
+
+print("data prepared")
 
 ##**************************************
 ## Plotting                         ----
@@ -197,6 +205,8 @@ grid::grid.raster(
 )
 dev.off()
 
+print("plot saved")
+
 # save plot ____________________________
 #ggsave("quandl_hashrate.png", plot = last_plot())
 
@@ -222,6 +232,8 @@ create_token(
   access_secret = accessTokenSecret
 )
 
+print("twitter api tokens loaded")
+
 ##**************************************
 ## Post Tweet                       ----
 ##**************************************
@@ -245,9 +257,13 @@ if (data[1, 2] == max(data$Value)) {
   )
 }
 
+print("twitter text created")
+
 # post tweet ___________________________
 post_tweet(status = paste0(text, " | https://t.me/data_bitcoin"),
            media = "quandl_hashrate.png")
+
+print("twitter posted")
 
 ##**************************************
 ## Telegram API                     ----
@@ -269,3 +285,6 @@ bot$sendPhoto(
   caption = paste0(text, "\n\n\U0001F916 <a href=\"https://twitter.com/data_bitcoin\">@data_bitcoin</a>"),
   parse_mode = "HTML"
 )
+
+print("telegram posted")
+
